@@ -83,10 +83,9 @@ public class Validation {
     }
 
     //check id and exist
-    public static boolean checkEmployeeById(List<Employee> list, String employeeID, String fullName) {
+    public static boolean checkEmployeeById(List<Employee> list, String employeeID) {
         for (Employee employee : list) {
-            if (employeeID.equalsIgnoreCase(employee.getEmployee_id())
-                    && !fullName.equalsIgnoreCase(employee.getFullName())) {
+            if (employeeID.equalsIgnoreCase(employee.getEmployee_id())) {
                 return false;
             }
         }
@@ -113,10 +112,9 @@ public class Validation {
         return true;
     }
 
-    public static boolean checkDepartment(List<Department> list, int deptID, String departName) {
+    public static boolean checkDepartment(List<Department> list, int deptID) {
         for (Department department : list) {
-            if (deptID == department.getDepartmentId()
-                    && !departName.equalsIgnoreCase(department.getDepartmentName())) {
+            if (deptID == department.getDepartmentId()) {
                 return false;
             }
         }

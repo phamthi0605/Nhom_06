@@ -28,12 +28,13 @@ public class FunctionEmployee {
             System.out.println("Thêm nhân viên mới");
             System.out.println("Mã nhân viên: ");
             String employeeId = Validation.checkInputString();
-            System.out.println("Họ và tên: ");
-            String fullName = Validation.checkInputString();
-            if (!Validation.checkEmployeeById(employeeList, employeeId, fullName)) {
+            if (!Validation.checkEmployeeById(employeeList, employeeId)) {
                 System.err.println("Nhân viên " + employeeId + " đã tồn tại. Nhập lại mã nhân viên: ");
                 continue;
             }
+            System.out.println("Họ và tên: ");
+            String fullName = Validation.checkInputString();
+
             System.out.println("Vị trí: ");
             // cần sửa đoạn này
             System.out.println("1." + Position.manager.name());

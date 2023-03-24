@@ -14,4 +14,6 @@ public class FunctionStatistical {
     public FunctionStatistical(Department department) {
         this.department = department;
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.group6.Manager;
 
 import com.group6.DAL.EmployeeDAO;
+import com.group6.DAL.StatisticalDAO;
 import com.group6.Entity.Admin;
 
 import java.util.Scanner;
@@ -120,29 +121,34 @@ public class Program {
                             }
                             break;
                         case 4:
-                            System.out.println("\tTHỐNG KÊ");
-                            menuStatistical();
-                            System.out.println("\tChọn chức năng thống kê: ");
-                            int optionStatistical = Validation.checkInputIntLimit(1, 4);
                             while (true) {
-                                while (optionStatistical < 1 || optionStatistical > 4) {
+                                System.out.println("\tTHỐNG KÊ");
+                                menuStatistical();
+                                System.out.println("\tChọn chức năng thống kê: ");
+                                int optionStatistical = Validation.checkInputIntLimit(1, 6);
+                                while (optionStatistical < 1 || optionStatistical > 6) {
                                     System.out.println("Chọn lại chức năng: ");
-                                    optionStatistical = Validation.checkInputIntLimit(1, 4);
+                                    optionStatistical = Validation.checkInputIntLimit(1, 6);
                                 }
                                 if (optionStatistical == 1) {
-                                    System.out.println("Tìm top 5 nhân viên cao nhất, thấp nhất");
+                                    System.out.println("Tìm top 5 nhân viên có lương thấp nhất");
+                                    StatisticalDAO.top5MinSalary();
                                 }
                                 if (optionStatistical == 2) {
                                     System.out.println("Tìm top 5 nhân viên có lương cao nhất");
+                                    StatisticalDAO.top5MaxSalary();
                                 }
                                 if (optionStatistical == 3) {
                                     System.out.println("Thống kê số lượng nhân viên mỗi phòng");
+                                    StatisticalDAO.countEmployeeInDept();
                                 }
                                 if (optionStatistical == 4) {
                                     System.out.println("Thống kê phòng ban có lương trung bình cao nhất");
+                                    StatisticalDAO.avgSalaryMaxInDept();
                                 }
                                 if (optionStatistical == 5) {
                                     System.out.println("Thống kê mức lương theo từng năm");
+                                    StatisticalDAO.sumSalaryByYear();
                                 }
                                 if (optionStatistical == 6) {
                                     System.out.println("Thoát");
@@ -191,12 +197,12 @@ public class Program {
     }
 
     public static void menuStatistical() {
-        System.out.println("1. Tìm top 5 nhân viên cao nhất, thấp nhất");
-        System.out.println("2. Tìm top 5 nhân viên có lương cao nhất");
-        System.out.println("3. Thống kê số lượng nhân viên mỗi phòng");
-        System.out.println("4. Thống kê phòng ban có lương trung bình cao nhất");
-        System.out.println("5. Thống kê mức lương theo từng năm");
-        System.out.println("6. Thoát");
+        System.out.println("\t1.Tìm top 5 nhân viên cao nhất, thấp nhất");
+        System.out.println("\t2.Tìm top 5 nhân viên có lương cao nhất");
+        System.out.println("\t3.Thống kê số lượng nhân viên mỗi phòng");
+        System.out.println("\t4.Thống kê phòng ban có lương trung bình cao nhất");
+        System.out.println("\t5.Thống kê mức lương theo từng năm");
+        System.out.println("\t6.Thoát");
     }
 
 }

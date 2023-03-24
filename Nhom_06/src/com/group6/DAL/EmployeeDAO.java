@@ -151,11 +151,11 @@ public class EmployeeDAO {
         con = db.getConnection();
         ResultSet result = null;
         try {
-            PreparedStatement ptm = con.prepareStatement("select * from employee where employee_id = ? or full_name =? or phone=? or email=? ");
+            PreparedStatement ptm = con.prepareStatement("select * from employee where employee_id = ? or full_name like ? or phone like ? or email like ? ");
             ptm.setString(1, employee.getEmployee_id());
-            ptm.setString(2, "%" + employee.getFullName());
+            ptm.setString(2, "%" + employee.getFullName()+"%");
             ptm.setString(3, "%" + employee.getPhoneNumber());
-            ptm.setString(4, "%" + employee.getEmail());
+            ptm.setString(4, "%" + employee.getEmail() + "%");
             result = ptm.executeQuery();
             if (result.next() == false) {
                 System.out.println("Không có dữ liệu!");
