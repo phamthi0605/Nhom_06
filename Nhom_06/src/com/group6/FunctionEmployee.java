@@ -1,10 +1,7 @@
 package com.group6;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class FunctionEmployee {
     static Scanner scanner = new Scanner(System.in);
@@ -33,39 +30,60 @@ public class FunctionEmployee {
                 continue;
             }
             System.out.println("Vị trí: ");
-            String position = Validation.checkInputString();
+            // cần sửa đoạn này
+            System.out.println("1." + Position.manager.name());
+            System.out.println("2. " + Position.employee);
+            int choosePosition = Validation.checkInputIntLimit(1, 2);
+
             System.out.println("Email: ");
             String email = Validation.checkInputString();
-            System.out.println("Lương: ");
-            float salary = Validation.checkSalary();
-            // tính thuế
-            employee.setPerson_Income_Tax(salary);
+            List<String> listCheckEmail = new ArrayList<>();
+            for (int i = 0; i < employeeList.size(); i++) {
+                listCheckEmail.add(employeeList.get(i).getEmail());
+            }
+            while (listCheckEmail.contains(email)) {
+                System.out.println("Email " + email + " đã tồn tại. Nhập lại: ");
+                email = Validation.checkInputString();
+            }
+            // Tính lương của nhân viên theo vị trí, và tính thuế theo lương
+            String position = null;
+            float salary = 0;
+            if (choosePosition == 1) {
+                position = Position.manager.name();
+                salary = Salary.managerSalary;
+                employee.setPerson_Income_Tax(salary);
+            }
+            if (choosePosition == 2) {
+                position = Position.employee.name();
+                salary = Salary.employeeSalary;
+                employee.setPerson_Income_Tax(salary);
+            }
+
             float tax = employee.getPerson_Income_Tax();
             // lấy currentDate
             Date date = new Date();
             SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String hireDate = formatDate.format(date);
             // nhập phòng ban cho nhân viên
-            System.out.println("Mã phòng ban:");
+            System.out.println("Chọn mã phòng ban:");
             int deptId = managementEmployee.checkInputDepartment(Integer.parseInt(scanner.nextLine()));
-            // nhập quản lý cho nhân viên
-            System.out.println("Quản lý của nhân viên: ");
-            String deptManagerID = scanner.nextLine();
-            String isManager = null;
-            if (deptManagerID.equals("y")) {
-                isManager = "'1'";
-            }
+            // nhân viên này có phải là quản lý ko?
+            System.out.println("Quản lý (Yes/No): ");
+            String deptManager = Validation.checkInputString();
+            String isManager = managementEmployee.checkIsManager(deptId, deptManager);
             employee = new Employee(employeeId, fullName, position, email, salary, tax, hireDate, deptId, isManager);
             if (Validation.checkemployeeExist(employeeList, employeeId, email)) {
                 ManagementEmployee managementEmployee = new ManagementEmployee(employee);
                 managementEmployee.addEmployee();
                 break;
             }
-            System.err.println("Thêm nhân viên thành công.");
+
+            break;
         }
 
     }
 
+    // check lại
     public static void updateEmployee() {
         List<Employee> employeeList = managementEmployee.getListEmployee();
         if (employeeList.isEmpty()) {

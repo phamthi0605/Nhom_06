@@ -2,7 +2,9 @@ package com.group6;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ManagementEmployee {
     private Employee employee;
@@ -374,5 +376,45 @@ public class ManagementEmployee {
         }
 
     }
+
+    // Check (departmentID, isManager): unique
+    // Kiểm tra xem nhân viên thuộc phòng ban này có là trưởng phòng ko
+    public String checkIsManager(int deptID, String deptManager) {
+        Connection con = null;
+        DBContext db = new DBContext();
+        con = db.getConnection();
+        String isManager = null;// kết quả trả về
+        if (deptManager.equals("y")) {
+            Map<Integer, String> map = new HashMap<>();
+            try {
+                Statement sm = con.createStatement();
+                ResultSet rs = sm.executeQuery("SELECT department_id,is_manager FROM employee");
+                if (!rs.next()) {
+                    System.out.println("Không có dữ liệu!");
+                } else {
+                    do {
+                        map.put(rs.getInt("department_id"), rs.getString("is_manager"));
+
+                    } while (rs.next());
+                }
+            } catch (SQLException e) {
+                e.getMessage();
+            }
+            for (Map.Entry<Integer, String> isManagerDept : map.entrySet()) {
+                while (deptID == isManagerDept.getKey() && isManagerDept.getValue().equals("1")) {
+                    System.err.println("Phòng ban: " + deptID + " đã có trưởng phòng!");
+                    System.out.println("Nhập lại (Yes/No): ");
+                    deptManager = Validation.checkInputString();
+                    if (deptManager.equals("n")) {
+                        return null;
+                    }
+                }
+
+            }
+            return "1";
+        }
+        return isManager;
+    }
+
 
 }

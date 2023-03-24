@@ -111,16 +111,26 @@ public class Employee {
     }
 
     public void setPerson_Income_Tax(float salary) {
-        if (salary <= 5000000) {
-            salary = (float) (salary * 0.05);
-        } else if (salary >= 5000000 && salary <= 10000000) {
-            salary = (float) (salary * 0.1);
-        } else if (salary >= 10000000 && salary <= 18000000) {
-            salary = (float) (salary * 0.15);
+        float result = 0;
+        float check = salary - 11000000;
+        if (check <= 0) {
+            result = 0;
+        } else if (check > 0 && check <= 5000000) {
+            result = (float) (check * 0.05);
+        } else if (check > 5000000 && check <= 10000000) {
+            result = (float) (250000.0 + (check - 5000000.0) * 0.1);
+        } else if (check > 10000000 && check <= 18000000) {
+            result = (float) (250000 + 500000 + (check - 10000000) * 0.15);
+        } else if (check > 18000000 && check <= 32000000) {
+            result = (float) (250000 + 500000 + 1200000 + (check - 18000000) * 0.2);
+        } else if (check > 32000000 && check <= 52000000) {
+            result = (float) (250000 + 500000 + 1200000 + 2800000 + (check - 32000000) * 0.25);
+        } else if (check > 52000000 && check <= 80000000) {
+            result = (float) (250000 + 500000 + 1200000 + 2800000 + 5000000 + (check - 52000000) * 0.3);
         } else {
-            salary = (float) (salary * 0.2);
+            result = (float) (250000 + 500000 + 1200000 + 2800000 + 5000000 + 8400000 + (check - 80000000) * 0.35);
         }
-        this.person_Income_Tax = salary;
+        this.person_Income_Tax = result;
     }
 
 

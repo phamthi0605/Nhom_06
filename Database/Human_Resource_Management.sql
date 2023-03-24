@@ -22,7 +22,7 @@ CREATE TABLE employee(
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	employee_id VARCHAR(200) NOT NULL UNIQUE,
 	full_name VARCHAR(200) NOT NULL,
-	position VARCHAR(200),
+	position ENUM('manager','employee'),
 	age INT UNSIGNED,
 	phone VARCHAR(200) UNIQUE,
 	email VARCHAR(200) UNIQUE,
@@ -31,20 +31,20 @@ CREATE TABLE employee(
 	hire_date DATETIME,
 	end_date DATETIME,
 	department_id INT,
-	is_manager ENUM('1'), -- nhân viên này có phải là trưởng phòng hay o
-	UNIQUE (department_id, is_manager),
-	FOREIGN KEY (department_id) REFERENCES department(id)
+	is_manager ENUM('1'), -- nhân viên này có phải là trưởng phòng hay không
+	UNIQUE (department_id, is_manager),			-- set cặp 1 phòng ban có nhiều nhân viên và trong 1 phòng ban chỉ có 1 manager
+	FOREIGN KEY (department_id) REFERENCES department(id) -- 1 phòng ban có nhiều nhân viên
 );
 
 
-INSERT INTO employee(employee_id, full_name, position, age, phone, email, salary, hire_date, end_date)
+INSERT INTO employee(employee_id, full_name, position, age, phone, email, hire_date, end_date, department_id,is_manager)
 VALUES
-		('1', 'Pham Thi Thi', 'developer', 24, '1', 'thipt1@gmail.com', 10000000, '2023-09-22 16:47:08', NULL),
-		('2', 'Nguyen Thi Hoa', 'Kế toán', 26, '2', 'hoant123@gmail.com',8500000, '2022-09-22 16:47:08', NULL),  
-		('3', 'Tran Thi Nga', 'tester', 25, '3', 'ngatran12@gmail.com',9000000, '2021-09-22 16:47:08', NULL),
-		('4', 'Tran Van Tien', 'Kế toán trưởng', 34, '4', 'tiennv1@gmail.com',19000000, '2009-09-22 16:47:08', null),
-		('5', 'Nguyen Van Viet', 'Kế toán', 23, '5', 'vietnt14@gmail.com',8500000, '2022-09-22 16:47:08', NULL),
-		('6', 'Nguyen Thi Trang', 'Kế toán', 26, '6', 'trang@gmail.com',8500000, '2020-09-22 16:47:08', NULL);
+		('1', 'Pham Thi Thi', 'manager', 24, '1', 'thipt1@gmail.com','2023-09-22 16:47:08', NULL, 1, 1),
+		('2', 'Nguyen Thi Hoa', 'employee', 26, '2', 'hoant123@gmail.com', '2022-09-22 16:47:08', NULL, 1, null),  
+		('3', 'Tran Thi Nga', 'employee', 25, '3', 'ngatran12@gmail.com','2021-09-22 16:47:08', NULL, 2, null),
+		('4', 'Tran Van Tien', 'manager', 34, '4', 'tiennv1@gmail.com', '2009-09-22 16:47:08',null ,2,1),
+		('5', 'Nguyen Van Viet', 'manager', 23, '5', 'vietnt14@gmail.com', '2022-09-22 16:47:08', NULL, 3,1),
+		('6', 'Nguyen Thi Trang', 'employee', 26, '6', 'trang@gmail.com', '2020-09-22 16:47:08', NULL, 3,null);
 	
 
 
@@ -59,3 +59,4 @@ CREATE TABLE admin(
 INSERT INTO admin(full_name, username, password)
 VALUES
 	('phamthi', 'thipt1', '1234');
+		
