@@ -61,9 +61,9 @@ public class FunctionDepartment {
             System.out.print("Bạn có muốn cập nhật nhân viên(Yes/No): ");
             if (Validation.checkInputYN()) {
                 System.out.println("Tên phòng ban:");
-                String deptNameUpdate = scanner.nextLine();
+                String deptNameUpdate = Validation.checkInputString();
                 System.out.println("Địa chỉ: ");
-                String addressUpdate = scanner.nextLine();
+                String addressUpdate = Validation.checkInputString();
                 //check employee change or not
                 if (!Validation.checkchangeInforDepartment(listFindDeptByID.get(0), deptId, deptNameUpdate, addressUpdate)) {
                     System.err.println("Dữ liệu không thay đổi");

@@ -111,9 +111,13 @@ public class FunctionEmployee {
                 System.out.println("Họ và tên: ");
                 String fullName = Validation.checkInputString();
                 System.out.println("Vị trí: ");
-                String position = Validation.checkInputString();
+                System.out.println("1." + Position.manager.name());
+                System.out.println("2. " + Position.employee);
+                int choosePosition = Validation.checkInputIntLimit(1, 2);
+
                 System.out.println("Tuổi: ");
                 int age = Validation.checkInputAge();
+                // phone number is unique
                 System.out.println("Số điện thoại: ");
                 String phoneNumber = Validation.checkInputString();
                 List<String> listCheckPhone = new ArrayList<>();
@@ -124,6 +128,7 @@ public class FunctionEmployee {
                     System.out.println("Số điện thoại " + phoneNumber + " đã tồn tại. Nhập lại: ");
                     phoneNumber = Validation.checkInputString();
                 }
+                //email is unique
                 System.out.println("Email: ");
                 String email = Validation.checkInputString();
                 List<String> listCheckEmail = new ArrayList<>();
@@ -134,34 +139,39 @@ public class FunctionEmployee {
                     System.out.println("Email " + email + " đã tồn tại. Nhập lại: ");
                     email = Validation.checkInputString();
                 }
-                //String email = Validation.checkInputString();
-                System.out.println("Lương: ");
-                float salary = Validation.checkSalary();
-                // tính thuế
-                employeeUpdate.setPerson_Income_Tax(salary);
+                String position = null;
+                float salary = 0;
+                if (choosePosition == 1) {
+                    position = Position.manager.name();
+                    salary = Salary.managerSalary;
+                    employeeUpdate.setPerson_Income_Tax(salary);
+                }
+                if (choosePosition == 2) {
+                    position = Position.employee.name();
+                    salary = Salary.employeeSalary;
+                    employeeUpdate.setPerson_Income_Tax(salary);
+                }
                 float tax = employeeUpdate.getPerson_Income_Tax();
-                // lấy currentDate
+                // get currentDate
                 Date date = new Date();
                 SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                // SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
                 String hireDate = formatDate.format(date);
-                // nhập phòng ban cho nhân viên
+
+                // select department for employee
                 System.out.println("Mã phòng ban:");
                 int deptId = managementEmployee.checkInputDepartment(Integer.parseInt(scanner.nextLine()));
-                // nhập quản lý cho nhân viên
+
+                // Are you manager?Yes/No?
                 System.out.println("Quản lý của nhân viên: ");
-                String deptManagerID = scanner.nextLine();
-                String isManager = null;
-                if (deptManagerID.equals("y")) {
-                    isManager = "'1'";
-                }
+                String deptManagerID = Validation.checkInputString();
+                String isManager = managementEmployee.checkIsManager(deptId, deptManagerID);
+
                 employeeUpdate = new Employee(employeeId, fullName, position, age, phoneNumber, email, salary, tax, hireDate, deptId, isManager);
                 if (Validation.checkemployeeExist(employeeList, employeeId, email)) {
                     ManagementEmployee managementEmployee = new ManagementEmployee(employeeUpdate);
                     managementEmployee.updateEmployee();
                     break;
                 }
-
             }
             break;
         }
