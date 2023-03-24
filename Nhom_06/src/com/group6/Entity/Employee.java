@@ -1,5 +1,7 @@
 package com.group6.Entity;
 
+import java.text.DecimalFormat;
+
 public class Employee {
     // private int id;
     private String employee_id;
@@ -99,11 +101,14 @@ public class Employee {
     }
 
     public float getSalary() {
+
         return salary;
     }
 
+
     public void setSalary(float salary) {
         this.salary = salary;
+
     }
 
     public float getPerson_Income_Tax() {
@@ -182,8 +187,13 @@ public class Employee {
         this.endDate = endDate;
     }
 
+    public static String format(float value) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+        return decimalFormat.format(value);
+    }
 
     public void showData() {
-        System.out.printf("%-15s%-20s%-15s%-10d%-16s%-25s%-20.2f%-20.2f%-25s%-31s%-16d%-12s\n", employee_id, fullName, position, age, phoneNumber, email, salary, person_Income_Tax, hire_date, endDate, department_id, is_manager);
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
+        System.out.printf("%-15s%-25s%-15s%-10d%-16s%-25s%-20s%-20s%-25s%-31s%-16d%-12s\n", employee_id, fullName, position, age, phoneNumber, email, format(salary), format(person_Income_Tax), hire_date, endDate, department_id, is_manager);
     }
 }

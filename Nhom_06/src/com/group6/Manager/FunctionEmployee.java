@@ -15,7 +15,7 @@ public class FunctionEmployee {
     public static void showListEmployee() {
         System.out.println("Hiển thị danh sách nhân viên");
         List<Employee> employeeList = managementEmployee.getListEmployee();
-        System.out.printf("%-15s%-20s%-15s%-10s%-16s%-25s%-20s%-20s%-25s%-26s%-20s%-10s\n", "EmployeeID", "FullName", "Position", "Age", "Phone", "Email", "Salary", "Tax", "Hire Date", "End Date", "DepartmentID", "IsManager");
+        System.out.printf("%-15s%-25s%-15s%-10s%-16s%-25s%-20s%-20s%-25s%-26s%-20s%-10s\n", "EmployeeID", "FullName", "Position", "Age", "Phone", "Email", "Salary", "Tax", "Hire Date", "End Date", "DepartmentID", "IsManager");
         for (Employee employee : employeeList) {
             employee.showData();
         }
@@ -109,7 +109,7 @@ public class FunctionEmployee {
                 continue;
             } else {
                 System.out.println("Kết quả tìm kiếm: ");
-                System.out.printf("%-15s%-20s%-15s%-10s%-16s%-25s%-20s%-20s%-25s%-26s%-20s%-10s\n", "EmployeeID", "FullName", "Position", "Age", "Phone", "Email", "Salary", "Tax", "Hire Date", "End Date", "DepartmentID", "IsManager");
+                System.out.printf("%-15s%-25s%-15s%-10s%-16s%-25s%-20s%-20s%-25s%-26s%-20s%-10s\n", "EmployeeID", "FullName", "Position", "Age", "Phone", "Email", "Salary", "Tax", "Hire Date", "End Date", "DepartmentID", "IsManager");
                 for (Employee employee : listFindEmployee) {
                     employee.showData();
                 }
