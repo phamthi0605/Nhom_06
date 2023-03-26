@@ -6,6 +6,7 @@ import com.group6.DB.DBContext;
 import com.group6.Manager.Validation;
 
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,9 +62,9 @@ public class EmployeeDAO {
             Connection con = null;
             DBContext db = new DBContext();
             con = db.getConnection();
-            String sql = "INSERT INTO employee (employee_id, full_name, position, email, salary, person_Income_Tax, hire_date, " +
+            String sql = "INSERT INTO employee ( full_name, position, email, salary, person_Income_Tax, hire_date, " +
                     "department_id, is_manager) " +
-                    "VALUES ('" + employee.getEmployee_id() + "', '" + employee.getFullName() + "', '" + employee.getPosition() + "'," +
+                    "VALUES ('" + employee.getFullName() + "', '" + employee.getPosition() + "'," +
                     "'" + employee.getEmail() + "', '" + employee.getSalary() + "', '" + employee.getPerson_Income_Tax() + "', '" + employee.getHire_date() + "'," +
                     " '" + employee.getDepartment_id() + "', " + employee.getIs_manager() + ")";
 
@@ -88,7 +89,7 @@ public class EmployeeDAO {
     public void updateEmployee() {
         String sql = "UPDATE employee SET full_name = ?, position=?, age=?, phone =?, email = ?, " +
                 "salary =?, person_Income_Tax=?, hire_date=?, department_id=?, is_manager=?" +
-                " WHERE employee_id = ?";
+                " WHERE id = ?";
         try {
             Connection con = null;
             DBContext db = new DBContext();
@@ -113,7 +114,98 @@ public class EmployeeDAO {
             psmt.executeUpdate();
             int count = psmt.executeUpdate();
             if (count > 0) {
-                employee.showData();
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "-------------------------------------------------------------------------------------------" +
+                        "--------------");
+                //   System.out.printf("|\t" + "%-21s%-20s%-20s%-20s%-20s%-30s%-20s%-20s%-20s\n", "Employee ID\t|", "Full Name\t\t|", "Position\t|", "Age\t|", "Phone\t|", "Email\t|", "Salary\t|", "Manager\t|", "Department Name\t|");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", "Employee ID");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Full Name");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Postion");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-10s", "Age");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Phone");
+                System.out.printf("%-19s", "|");
+                System.out.printf("%-32s", "Email");
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", "Salary");
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", "Tax");
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", "Hire Date");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Department ID");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-23s", "Manager");
+                System.out.printf("%-16s\n", "|");
+                //System.out.printf("%-8s", "|");
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "-------------------------------------------------------------------------------------------" +
+                        "--------------");
+                String id = employee.getEmployee_id();
+                String fullName = employee.getFullName();
+                String position = employee.getPosition();
+                int age = employee.getAge();
+                String phone = employee.getPhoneNumber();
+                if (phone == null) {
+                    phone = "--";
+                }
+                String email = employee.getEmail();
+                if (email == null) {
+                    email = "--";
+                }
+                float salary = employee.getSalary();
+
+
+                float tax = employee.getPerson_Income_Tax();
+
+                String isManager = employee.getIs_manager();
+                if (isManager == null) {
+                    isManager = "--";
+                }
+                String hireDate = employee.getHire_date();
+
+                int deptID = employee.getDepartment_id();
+                if (isManager == null) {
+                    isManager = "--";
+                }
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", id);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", fullName);
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", position);
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-10s", age);
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", phone);
+                System.out.printf("%-19s", "|");
+                System.out.printf("%-32s", email);
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", format(salary));
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", format(tax));
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", hireDate);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", deptID);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-23s", isManager);
+                System.out.printf("%-8s", "|");
+                System.out.println();
+
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "-------------------------------------------------------------------------------------------" +
+                        "--------------");
             } else {
                 System.out.println("cập nhật nhân viên thất bại!");
             }
@@ -129,7 +221,7 @@ public class EmployeeDAO {
      * Remove employee by employee id
      */
     public void removeEmployee() {
-        String sql = "DELETE from employee WHERE employee_id = ?";
+        String sql = "DELETE from employee WHERE id = ?";
         try {
             Connection con = null;
             DBContext db = new DBContext();
@@ -151,19 +243,18 @@ public class EmployeeDAO {
         con = db.getConnection();
         ResultSet result = null;
         try {
-            PreparedStatement ptm = con.prepareStatement("select * from employee where employee_id = ? or full_name like ? or phone like ? or email like ? ");
+            PreparedStatement ptm = con.prepareStatement("select * from employee where id = ? or full_name like ? or phone like ? or email like ? ");
             ptm.setString(1, employee.getEmployee_id());
-            ptm.setString(2, "%" + employee.getFullName()+"%");
+            ptm.setString(2, "%" + employee.getFullName() + "%");
             ptm.setString(3, "%" + employee.getPhoneNumber());
             ptm.setString(4, "%" + employee.getEmail() + "%");
             result = ptm.executeQuery();
             if (result.next() == false) {
                 System.out.println("Không có dữ liệu!");
             } else {
-                System.out.printf("%-8s%-15s%-20s%-15s%-10s%-16s%-25s%-20s%-20s%-10s\n", "ID", "EmployeeID", "FullName", "Position", "Age", "Phone", "Email", "Salary", "Tax", "DepartmentID");
+                System.out.printf("%-8s%-15s%-20s%-15s%-10s%-16s%-25s%-20s%-20s%-10s\n", "EmployeeID", "FullName", "Position", "Age", "Phone", "Email", "Salary", "Tax", "DepartmentID");
                 do {
-                    int id = result.getInt("id");
-                    String employeeId = result.getString("employee_id");
+                    String employeeId = result.getString("id");
                     String fullName = result.getString("full_name");
                     String position = result.getString("position");
                     int age = result.getInt("age");
@@ -174,7 +265,7 @@ public class EmployeeDAO {
 //                    Date hireDate = result.getDate("hire_date");
 //                    Date endDate = result.getDate("end_date");
                     int deptID = result.getInt("department_id");
-                    System.out.printf("%-8s%-15s%-20s%-15s%-10d%-16s%-25s%-20f%-20f%-10d\n", id, employeeId, fullName, position, age, phoneNumber, email, salary, tax, deptID);
+                    System.out.printf("%-8s%-15s%-20s%-15s%-10d%-16s%-25s%-20f%-20f%-10d\n", employeeId, fullName, position, age, phoneNumber, email, salary, tax, deptID);
 
                 }
                 while (result.next());
@@ -187,7 +278,117 @@ public class EmployeeDAO {
 
     }
 
-    public List<Employee> getListEmployee() {
+    public static ResultSet getList() {
+        Connection con = null;
+        DBContext db = new DBContext();
+        con = db.getConnection();
+        Statement sm = null;
+        ResultSet rs = null;
+        try {
+            sm = con.createStatement();
+            rs = sm.executeQuery("SELECT employee.id, employee.full_name ,employee.`position`,employee.age, employee.phone,\n" +
+                    "employee.email, employee.salary, employee.is_manager,\n" +
+                    "department.department_name\n" +
+                    "FROM employee JOIN department ON employee.department_id = department.id");
+            if (!rs.next()) {
+                System.out.println("Không có dữ liệu!");
+            } else {
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "----------------------------------");
+                //   System.out.printf("|\t" + "%-21s%-20s%-20s%-20s%-20s%-30s%-20s%-20s%-20s\n", "Employee ID\t|", "Full Name\t\t|", "Position\t|", "Age\t|", "Phone\t|", "Email\t|", "Salary\t|", "Manager\t|", "Department Name\t|");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", "Employee ID");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Full Name");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Postion");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-10s", "Age");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Phone");
+                System.out.printf("%-19s", "|");
+                System.out.printf("%-32s", "Email");
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", "Salary");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-23s", "Manager");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Department Name");
+                System.out.printf("%-16s\n", "|");
+                //System.out.printf("%-8s", "|");
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "----------------------------------");
+                do {
+                    String id = rs.getString("id");
+                    String fullName = rs.getString("full_name");
+                    String position = rs.getString("position");
+                    int age = rs.getInt("age");
+                    String phone = rs.getString("phone");
+                    if (phone == null) {
+                        phone = "--";
+                    }
+                    String email = rs.getString("email");
+                    if (email == null) {
+                        email = "--";
+                    }
+                    float salary = rs.getFloat("salary");
+                    String isManager = rs.getString("is_manager");
+                    if (isManager == null) {
+                        isManager = "--";
+                    }
+                    String department_name = rs.getString("department_name");
+                    if (department_name == null) {
+                        department_name = "--";
+                    }
+                    System.out.printf("%-8s", "|");
+                    System.out.printf("%-20s", id);
+                    System.out.printf("%-10s", "|");
+                    System.out.printf("%-20s", fullName);
+                    System.out.printf("%-12s", "|");
+                    System.out.printf("%-20s", position);
+                    System.out.printf("%-8s", "|");
+                    System.out.printf("%-10s", age);
+                    System.out.printf("%-12s", "|");
+                    System.out.printf("%-20s", phone);
+                    System.out.printf("%-19s", "|");
+                    System.out.printf("%-32s", email);
+                    System.out.printf("%-13s", "|");
+                    System.out.printf("%-23s", format(salary));
+                    System.out.printf("%-10s", "|");
+                    System.out.printf("%-23s", isManager);
+                    System.out.printf("%-10s", "|");
+                    System.out.printf("%-20s", department_name);
+                    System.out.printf("%-8s", "|");
+                    System.out.println();
+                    //  System.out.printf("|\t" + "%-20s%" + "-25s%-20s%-20d%-20s%-30s%-20s%-20s%-20s\n", id, fullName, position, age, phone, email, format(salary), isManager, department_name + "|");
+                    // System.out.printf("%-5s", "|");
+                    //System.out.printf("%-20s", id);
+                    //System.out.printf("%-5s", "|");
+
+
+                } while (rs.next());
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "----------------------------------");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+
+    }
+
+    public static String format(float value) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+        return decimalFormat.format(value);
+    }
+
+    public List getListEmployee() {
         List<Employee> list = new ArrayList<>();
         Connection con = null;
         DBContext db = new DBContext();
@@ -201,7 +402,7 @@ public class EmployeeDAO {
             } else {
                 do {
                     Employee employee = new Employee(
-                            rs.getString("employee_id"),
+                            rs.getString("id"),
                             rs.getString("full_name"),
                             rs.getString("position"),
                             rs.getInt("age"),
@@ -223,6 +424,43 @@ public class EmployeeDAO {
 
         return list;
     }
+//    public static ResultSet getEmployee() {
+//        Connection con = null;
+//        DBContext db = new DBContext();
+//        con = db.getConnection();
+//        ResultSet rs = null;
+//        try {
+//            Statement sm = con.createStatement();
+//            rs = sm.executeQuery("SELECT employee.employee_id, employee.full_name ,employee.`position`,employee.age, employee.phone,\n" +
+//                    "employee.email, employee.salary, employee.is_manager,\n" +
+//                    "department.department_name\n" +
+//                    "FROM employee \n" +
+//                    "LEFT JOIN department ON employee.employee_id = department.id");
+//            if (rs.next() == false) {
+//                System.out.println("Không có dữ liệu!");
+//            } else {
+//                System.out.printf("%-15s%-21s%-13s%-19s%-20s%-30s%-25s%-25s%-15s\n", "Employe ID", "Full Name", "Position", "Age", "Phone", "Email", "Salary", "Manager", "Department Name");
+//                do {
+//                    System.out.printf("%-15s%-21s%-13s%-19d%-20s%-30s%-25f%-25s%-15s\n",
+//                            rs.getString("employee_id"),
+//                            rs.getString("full_name"),
+//                            rs.getString("position"),
+//                            rs.getInt("age"),
+//                            rs.getString("phone"),
+//                            rs.getString("email"),
+//                            rs.getFloat("salary"),
+//                            rs.getString("is_manager"),
+//                            rs.getString("department_name")
+//                    );
+//                }
+//                while (rs.next());
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return rs;
+//    }
 
     public List<Employee> getListEmployeeByDeptId() {
         List<Employee> list = new ArrayList<>();
@@ -241,7 +479,7 @@ public class EmployeeDAO {
             } else {
                 do {
                     Employee employee = new Employee(
-                            rs.getString("employee_id"),
+                            rs.getString("id"),
                             rs.getString("full_name"),
                             rs.getString("position"),
                             rs.getInt("age"),
@@ -279,7 +517,7 @@ public class EmployeeDAO {
     public void transferDepartmentForEmployee() {
         String sql = "UPDATE employee SET full_name = ?, position=?, age=?, phone =?, email = ?, " +
                 "salary =?, person_Income_Tax=?, hire_date=?, department_id=?, is_manager=?" +
-                " WHERE employee_id = ?";
+                " WHERE id = ?";
         try {
             Connection con = null;
             DBContext db = new DBContext();
@@ -344,7 +582,7 @@ public class EmployeeDAO {
     public void addDepartForEmployee() {
         String sql = "UPDATE employee SET full_name = ?, position=?, age=?, phone =?, email = ?, " +
                 "salary =?, person_Income_Tax=?, hire_date=?, department_id=?, is_manager=?" +
-                " WHERE employee_id = ?";
+                " WHERE id = ?";
         try {
             Connection con = null;
             DBContext db = new DBContext();
@@ -411,15 +649,51 @@ public class EmployeeDAO {
                     System.out.println("Nhập lại (Yes/No): ");
                     deptManager = Validation.checkInputString();
                     if (deptManager.equals("n")) {
-                        return null;
+                        return null; // 1-1: 1 phòng ban chỉ có 1 quản lý ,1-0: dân đen
                     }
                 }
 
             }
             return "1";
         }
-        return isManager;
+        return null;
     }
 
+    public boolean isManager(int deptID, String deptManager) {
+        Connection con = null;
+        DBContext db = new DBContext();
+        con = db.getConnection();
+        String isManager = null;// kết quả trả về
+        if (deptManager.equals("y")) {
+            Map<Integer, String> map = new HashMap<>();
+            try {
+                Statement sm = con.createStatement();
+                ResultSet rs = sm.executeQuery("SELECT department_id,is_manager FROM employee");
+                if (!rs.next()) {
+                    System.out.println("Không có dữ liệu!");
+                } else {
+                    do {
+                        map.put(rs.getInt("department_id"), rs.getString("is_manager"));
+
+                    } while (rs.next());
+                }
+            } catch (SQLException e) {
+                e.getMessage();
+            }
+            for (Map.Entry<Integer, String> isManagerDept : map.entrySet()) {
+                while (deptID == isManagerDept.getKey() && isManagerDept.getValue().equals("1")) {
+                    System.err.println("Phòng ban: " + deptID + " đã có trưởng phòng!");
+                    System.err.println("Chỉ được nhập N(No):");
+                    deptManager = Validation.checkInputString();
+                    if (deptManager.equals("n")) {
+                        return true;
+                    }
+                }
+
+            }
+            return false;
+        }
+        return true;
+    }
 
 }

@@ -3,7 +3,9 @@ package com.group6.Manager;
 import com.group6.DAL.EmployeeDAO;
 import com.group6.DAL.StatisticalDAO;
 import com.group6.Entity.Admin;
+import com.group6.Entity.Employee;
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class Program {
@@ -60,10 +62,14 @@ public class Program {
                                     optionEmp = Validation.checkInputIntLimit(1, 6);
                                 }
                                 if (optionEmp == 1) {
-                                    FunctionEmployee.showListEmployee();
+                                    System.out.println("Hiển thị danh sách nhân viên");
+                                    EmployeeDAO.getList();
+
                                 }
                                 if (optionEmp == 2) {
                                     FunctionEmployee.addEmployee();
+                                    System.out.println("Danh sách nhân viên sau khi thêm mới: ");
+                                    EmployeeDAO.getList();
                                 }
                                 if (optionEmp == 3) {
                                     FunctionEmployee.updateEmployee();

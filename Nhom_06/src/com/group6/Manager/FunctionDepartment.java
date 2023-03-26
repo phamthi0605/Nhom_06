@@ -5,6 +5,7 @@ import com.group6.DAL.EmployeeDAO;
 import com.group6.Entity.Department;
 import com.group6.Entity.Employee;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -199,7 +200,7 @@ public class FunctionDepartment {
                 listCheckId.add(listEmployeeInDept.get(i).getEmployee_id());
             }
             while (!listCheckId.contains(empIdTransfer)) {
-                System.out.println("Bạn chỉ được phép chọn employee id có trong danh sách bên trên!");
+                System.out.println("Bạn chỉ được phép chọn nhân viên có trong danh sách bên trên!");
                 empIdTransfer = Validation.checkInputString();
             }
             System.out.println("Thông tin của nhân viên " + empIdTransfer + " trước khi chuyển: ");
@@ -245,10 +246,10 @@ public class FunctionDepartment {
             listCheckId.add(listEmployeeDeptIsNull.get(i).getEmployee_id());
         }
         while (!listCheckId.contains(empID)) {
-            System.out.println("Bạn chỉ được phép chọn employee id có trong danh sách bên trên!");
+            System.out.println("Bạn chỉ được phép chọn nhân viên có trong danh sách bên trên!");
             empID = Validation.checkInputString();
         }
-        System.out.println("Thông tin của nhân viên trước khi update: ");
+        System.out.println("Thông tin của nhân viên trước khi cập nhật: ");
         Employee employee = new Employee();
         employee.setEmployee_id(empID);
         EmployeeDAO managementEmployee = new EmployeeDAO(employee);

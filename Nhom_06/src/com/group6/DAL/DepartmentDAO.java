@@ -48,6 +48,55 @@ public class DepartmentDAO {
         return list;
     }
 
+    public static ResultSet getListDept() {
+        Connection con = null;
+        DBContext db = new DBContext();
+        con = db.getConnection();
+        Statement sm = null;
+        ResultSet rs = null;
+        try {
+            sm = con.createStatement();
+            rs = sm.executeQuery("SELECT * FROM department");
+            if (!rs.next()) {
+                System.out.println("Không có dữ liệu!");
+            } else {
+                System.out.println("------------------------------------------------------------------------------");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", "Department ID");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Department Name");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Address");
+                System.out.printf("%-8s", "|");
+                System.out.println("------------------------------------------------------------------------------");
+                do {
+                    String id = rs.getString("id");
+                    String department_name = rs.getString("department_name");
+                    if (department_name == null) {
+                        department_name = "--";
+                    }
+                    String address = rs.getString("address");
+                    if (address == null) {
+                        address = "--";
+                    }
+                    System.out.printf("%-8s", "|");
+                    System.out.printf("%-20s", id);
+                    System.out.printf("%-15s", "|");
+                    System.out.printf("%-30s", department_name);
+                    System.out.printf("%-12s", "|");
+                    System.out.printf("%-20s", address);
+                    System.out.printf("%-8s", "|");
+                    System.out.println();
+                } while (rs.next());
+                System.out.println("------------------------------------------------------------------------------");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+
+    }
+
     public void addDepartment() {
         try {
             Connection con = null;

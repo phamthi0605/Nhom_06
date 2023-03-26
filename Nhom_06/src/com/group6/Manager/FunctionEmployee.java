@@ -1,6 +1,8 @@
 package com.group6.Manager;
 
+import com.group6.DAL.DepartmentDAO;
 import com.group6.DAL.EmployeeDAO;
+import com.group6.Entity.Department;
 import com.group6.Entity.Employee;
 import com.group6.Entity.Position;
 import com.group6.Entity.Salary;
@@ -11,36 +13,93 @@ import java.util.*;
 public class FunctionEmployee {
     static Scanner scanner = new Scanner(System.in);
     static EmployeeDAO managementEmployee = new EmployeeDAO();
-
-    public static void showListEmployee() {
-        System.out.println("Hiển thị danh sách nhân viên");
-        List<Employee> employeeList = managementEmployee.getListEmployee();
-        System.out.printf("%-15s%-25s%-15s%-10s%-16s%-25s%-20s%-20s%-25s%-26s%-20s%-10s\n", "EmployeeID", "FullName", "Position", "Age", "Phone", "Email", "Salary", "Tax", "Hire Date", "End Date", "DepartmentID", "IsManager");
-        for (Employee employee : employeeList) {
-            employee.showData();
-        }
-    }
+    static DepartmentDAO mangementDerpartment = new DepartmentDAO();
 
     public static void addEmployee() {
         List<Employee> employeeList = managementEmployee.getListEmployee();
         while (true) {
             Employee employee = new Employee();
             System.out.println("Thêm nhân viên mới");
-            System.out.println("Mã nhân viên: ");
-            String employeeId = Validation.checkInputString();
-            if (!Validation.checkEmployeeById(employeeList, employeeId)) {
-                System.err.println("Nhân viên " + employeeId + " đã tồn tại. Nhập lại mã nhân viên: ");
-                continue;
-            }
+//            System.out.println("Mã nhân viên: ");
+//            String employeeId = Validation.checkInputString();
+//            if (!Validation.checkEmployeeById(employeeList, employeeId)) {
+//                System.err.println("Nhân viên " + employeeId + " đã tồn tại. Nhập lại mã nhân viên: ");
+//                continue;
+//            }
             System.out.println("Họ và tên: ");
             String fullName = Validation.checkInputString();
+            // nhập phòng ban cho nhân viên
+            List<Department> departmentList = mangementDerpartment.getListDepartment();
+            System.out.println("-----------------------------------------------------------------------------------");
+            System.out.printf("%-5s", "|");
+            System.out.printf("%-15s", "Department ID");
+            System.out.printf("%-12s", "|");
+            System.out.printf("%-20s", "Department Name");
+            System.out.printf("%-10s", "|");
+            System.out.printf("%-20s", "Address");
+            System.out.printf("%-8s\n", "|");
+            System.out.println("-----------------------------------------------------------------------------------");
+            for (Department department : departmentList) {
+                System.out.printf("%-5s", "|");
+                System.out.printf("%-15s", department.getDepartmentId());
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", department.getDepartmentName());
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", department.getAddress());
+                System.out.printf("%-8s\n", "|");
+            }
+            System.out.println("-----------------------------------------------------------------------------------");
+            System.out.println("Chọn mã phòng ban:");
+            int deptId = Validation.checkInputInt();
+            List<Integer> listCheckDeptId = new ArrayList<>();
+
+            for (int i = 0; i < departmentList.size(); i++) {
+                listCheckDeptId.add(departmentList.get(i).getDepartmentId());
+            }
+            while (!listCheckDeptId.contains(deptId)) {
+                System.out.println("Bạn chỉ được phép chọn những bộ phận trên!");
+                deptId = Validation.checkInputInt();
+            }
+            // int deptId = managementEmployee.checkInputDepartment(Integer.parseInt(scanner.nextLine()));
+            // nhân viên này có phải là quản lý ko?
+            System.out.println("Quản lý (Yes/No): ");
+            String deptManager = Validation.checkInputString();
+            String isManager = managementEmployee.checkIsManager(deptId, deptManager);//y/n
 
             System.out.println("Vị trí: ");
-            // cần sửa đoạn này
-            System.out.println("1." + Position.manager.name());
-            System.out.println("2. " + Position.employee);
-            int choosePosition = Validation.checkInputIntLimit(1, 2);
 
+            System.out.println("1." + Position.manager.name());
+            System.out.println("2. " + Position.employee.name());
+            int choosePosition = Validation.checkInputIntLimit(1, 2);
+            // Tính lương của nhân viên theo vị trí, và tính thuế theo lương
+            String position = null;
+            float salary = 0;
+            if (choosePosition == 1) {
+                if (managementEmployee.isManager(deptId, deptManager)) {
+                    position = Position.employee.name();
+                    salary = Salary.employeeSalary;
+                    employee.setPerson_Income_Tax(salary);
+                } else {
+                    position = Position.manager.name();
+                    salary = Salary.managerSalary;
+                    employee.setPerson_Income_Tax(salary);
+                }
+
+            }
+            if (choosePosition == 2) {
+                if (managementEmployee.isManager(deptId, deptManager)) {
+                    position = Position.employee.name();
+                    salary = Salary.employeeSalary;
+                    employee.setPerson_Income_Tax(salary);
+                } else {
+                    position = Position.manager.name();
+                    salary = Salary.managerSalary;
+                    employee.setPerson_Income_Tax(salary);
+                }
+
+            }
+
+            float tax = employee.getPerson_Income_Tax();
             System.out.println("Email: ");
             String email = Validation.checkInputString();
             List<String> listCheckEmail = new ArrayList<>();
@@ -51,34 +110,13 @@ public class FunctionEmployee {
                 System.out.println("Email " + email + " đã tồn tại. Nhập lại: ");
                 email = Validation.checkInputString();
             }
-            // Tính lương của nhân viên theo vị trí, và tính thuế theo lương
-            String position = null;
-            float salary = 0;
-            if (choosePosition == 1) {
-                position = Position.manager.name();
-                salary = Salary.managerSalary;
-                employee.setPerson_Income_Tax(salary);
-            }
-            if (choosePosition == 2) {
-                position = Position.employee.name();
-                salary = Salary.employeeSalary;
-                employee.setPerson_Income_Tax(salary);
-            }
-
-            float tax = employee.getPerson_Income_Tax();
             // lấy currentDate
             Date date = new Date();
             SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String hireDate = formatDate.format(date);
-            // nhập phòng ban cho nhân viên
-            System.out.println("Chọn mã phòng ban:");
-            int deptId = managementEmployee.checkInputDepartment(Integer.parseInt(scanner.nextLine()));
-            // nhân viên này có phải là quản lý ko?
-            System.out.println("Quản lý (Yes/No): ");
-            String deptManager = Validation.checkInputString();
-            String isManager = managementEmployee.checkIsManager(deptId, deptManager);
-            employee = new Employee(employeeId, fullName, position, email, salary, tax, hireDate, deptId, isManager);
-            if (Validation.checkemployeeExist(employeeList, employeeId, email)) {
+
+            employee = new Employee(fullName, position, email, salary, tax, hireDate, deptId, isManager);
+            if (Validation.checkEmployeeExist(employeeList, email)) {
                 EmployeeDAO managementEmployee = new EmployeeDAO(employee);
                 managementEmployee.addEmployee();
                 break;
@@ -116,11 +154,77 @@ public class FunctionEmployee {
                 }
                 System.out.println("Họ và tên: ");
                 String fullName = Validation.checkInputString();
-                System.out.println("Vị trí: ");
-                System.out.println("1." + Position.manager.name());
-                System.out.println("2. " + Position.employee);
-                int choosePosition = Validation.checkInputIntLimit(1, 2);
 
+                // nhập phòng ban cho nhân viên
+                List<Department> departmentList = mangementDerpartment.getListDepartment();
+                System.out.println("-----------------------------------------------------------------------------------");
+                System.out.printf("%-5s", "|");
+                System.out.printf("%-15s", "Department ID");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Department Name");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Address");
+                System.out.printf("%-8s\n", "|");
+                System.out.println("-----------------------------------------------------------------------------------");
+                for (Department department : departmentList) {
+                    System.out.printf("%-5s", "|");
+                    System.out.printf("%-15s", department.getDepartmentId());
+                    System.out.printf("%-12s", "|");
+                    System.out.printf("%-20s", department.getDepartmentName());
+                    System.out.printf("%-10s", "|");
+                    System.out.printf("%-20s", department.getAddress());
+                    System.out.printf("%-8s\n", "|");
+                }
+                System.out.println("-----------------------------------------------------------------------------------");
+                System.out.println("Chọn mã phòng ban:");
+                int deptId = Validation.checkInputInt();
+                List<Integer> listCheckDeptId = new ArrayList<>();
+
+                for (int i = 0; i < departmentList.size(); i++) {
+                    listCheckDeptId.add(departmentList.get(i).getDepartmentId());
+                }
+                while (!listCheckDeptId.contains(deptId)) {
+                    System.out.println("Bạn chỉ được phép chọn những bộ phận trên!");
+                    deptId = Validation.checkInputInt();
+                }
+                // int deptId = managementEmployee.checkInputDepartment(Integer.parseInt(scanner.nextLine()));
+                // nhân viên này có phải là quản lý ko?
+                System.out.println("Quản lý (Yes/No): ");
+                String deptManager = Validation.checkInputString();
+                String isManager = managementEmployee.checkIsManager(deptId, deptManager);//y/n
+
+                System.out.println("Vị trí: ");
+
+                System.out.println("1." + Position.manager.name());
+                System.out.println("2. " + Position.employee.name());
+                int choosePosition = Validation.checkInputIntLimit(1, 2);
+                // Tính lương của nhân viên theo vị trí, và tính thuế theo lương
+                String position = null;
+                float salary = 0;
+                if (choosePosition == 1) {
+                    if (managementEmployee.isManager(deptId, deptManager)) {
+                        position = Position.employee.name();
+                        salary = Salary.employeeSalary;
+                        employeeUpdate.setPerson_Income_Tax(salary);
+                    } else {
+                        position = Position.manager.name();
+                        salary = Salary.managerSalary;
+                        employeeUpdate.setPerson_Income_Tax(salary);
+                    }
+
+                }
+                if (choosePosition == 2) {
+                    if (managementEmployee.isManager(deptId, deptManager)) {
+                        position = Position.employee.name();
+                        salary = Salary.employeeSalary;
+                        employeeUpdate.setPerson_Income_Tax(salary);
+                    } else {
+                        position = Position.manager.name();
+                        salary = Salary.managerSalary;
+                        employeeUpdate.setPerson_Income_Tax(salary);
+                    }
+
+                }
                 System.out.println("Tuổi: ");
                 int age = Validation.checkInputAge();
                 // phone number is unique
@@ -145,35 +249,14 @@ public class FunctionEmployee {
                     System.out.println("Email " + email + " đã tồn tại. Nhập lại: ");
                     email = Validation.checkInputString();
                 }
-                String position = null;
-                float salary = 0;
-                if (choosePosition == 1) {
-                    position = Position.manager.name();
-                    salary = Salary.managerSalary;
-                    employeeUpdate.setPerson_Income_Tax(salary);
-                }
-                if (choosePosition == 2) {
-                    position = Position.employee.name();
-                    salary = Salary.employeeSalary;
-                    employeeUpdate.setPerson_Income_Tax(salary);
-                }
                 float tax = employeeUpdate.getPerson_Income_Tax();
                 // get currentDate
                 Date date = new Date();
                 SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String hireDate = formatDate.format(date);
 
-                // select department for employee
-                System.out.println("Mã phòng ban:");
-                int deptId = managementEmployee.checkInputDepartment(Integer.parseInt(scanner.nextLine()));
-
-                // Are you manager?Yes/No?
-                System.out.println("Quản lý của nhân viên: ");
-                String deptManagerID = Validation.checkInputString();
-                String isManager = managementEmployee.checkIsManager(deptId, deptManagerID);
-
                 employeeUpdate = new Employee(employeeId, fullName, position, age, phoneNumber, email, salary, tax, hireDate, deptId, isManager);
-                if (Validation.checkemployeeExist(employeeList, employeeId, email)) {
+                if (Validation.checkEmployeeExist(employeeList, email)) {
                     EmployeeDAO managementEmployee = new EmployeeDAO(employeeUpdate);
                     managementEmployee.updateEmployee();
                     break;

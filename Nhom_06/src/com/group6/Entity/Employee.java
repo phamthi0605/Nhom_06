@@ -21,6 +21,8 @@ public class Employee {
 
     }
 
+
+    // Update employee
     public Employee(String employee_id, String fullName, String position, int age, String phoneNumber, String email, float salary, float person_Income_Tax,
                     String hire_date, String endDate, int department_id, String is_manager) {
         this.employee_id = employee_id;
@@ -35,19 +37,6 @@ public class Employee {
         this.endDate = endDate;
         this.department_id = department_id;
         this.is_manager = is_manager;
-    }
-
-    public Employee(String employeeId, String fullName, String position, String email,
-                    float salary, float tax, String hireDate, int deptID, String isManager) {
-        this.employee_id = employeeId;
-        this.fullName = fullName;
-        this.position = position;
-        this.email = email;
-        this.salary = salary;
-        this.person_Income_Tax = tax;
-        this.hire_date = hireDate;
-        this.department_id = deptID;
-        this.is_manager = isManager;
     }
 
 
@@ -65,6 +54,21 @@ public class Employee {
         this.hire_date = hire_date;
         this.department_id = department_id;
         this.is_manager = is_manager;
+    }
+
+
+    // add employee
+    public Employee(String fullName, String position, String email, float salary, float tax, String hireDate, int deptId, String is_manager) {
+
+        this.fullName = fullName;
+        this.position = position;
+        this.email = email;
+        this.salary = salary;
+        this.person_Income_Tax = tax;
+        this.hire_date = hireDate;
+        this.department_id = deptId;
+        this.is_manager = is_manager;
+
     }
 
 
@@ -193,7 +197,6 @@ public class Employee {
     }
 
     public void showData() {
-        DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
         System.out.printf("%-15s%-25s%-15s%-10d%-16s%-25s%-20s%-20s%-25s%-31s%-16d%-12s\n", employee_id, fullName, position, age, phoneNumber, email, format(salary), format(person_Income_Tax), hire_date, endDate, department_id, is_manager);
     }
 }

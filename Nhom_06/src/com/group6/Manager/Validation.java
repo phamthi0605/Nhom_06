@@ -70,47 +70,17 @@ public class Validation {
     }
 
     //check employee exist
-    public static boolean checkemployeeExist(List<Employee> list, String employeeId,
+    public static boolean checkEmployeeExist(List<Employee> list,
                                              String email) {
         //  int size = list.size();
         for (Employee employee : list) {
-            if (employeeId.equals(employee.getEmployee_id())
-                    && email.equalsIgnoreCase(employee.getEmail())) {
+            if (email.equalsIgnoreCase(employee.getEmail())) {
                 return false;
             }
         }
         return true;
     }
 
-    //check id and exist
-    public static boolean checkEmployeeById(List<Employee> list, String employeeID) {
-        for (Employee employee : list) {
-            if (employeeID.equalsIgnoreCase(employee.getEmployee_id())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    //check employee change or not
-    public static boolean checkChangeInfomation(Employee employee, String employeeId,
-                                                String fullName, String position, String email,
-                                                float salary, float tax,
-                                                int deptId, String isManager) {
-        if (employeeId.equalsIgnoreCase(employee.getEmployee_id())
-                && fullName.equalsIgnoreCase(employee.getFullName())
-                && position.equalsIgnoreCase(employee.getPosition())
-                && email.equalsIgnoreCase(employee.getEmail())
-                && salary == employee.getSalary()
-                && tax == employee.getPerson_Income_Tax()
-                && deptId == employee.getDepartment_id()
-                && isManager.equals(employee.getIs_manager())
-        ) {
-            return false;
-        }
-
-        return true;
-    }
 
     public static boolean checkDepartment(List<Department> list, int deptID) {
         for (Department department : list) {
@@ -141,12 +111,6 @@ public class Validation {
         return true;
     }
 
-    public static boolean checkChangeInfomation(Employee employee, String empID, int deptTransfer) {
-        if (empID.equalsIgnoreCase(employee.getEmployee_id()) && deptTransfer == employee.getDepartment_id()) {
-            return false;
-        }
-        return true;
-    }
 
     public static String checkInputString() {
         //loop until user input true value
@@ -160,19 +124,4 @@ public class Validation {
         }
     }
 
-    public static float checkSalary() {
-        //loop until user input correct
-        while (true) {
-            try {
-                float result = Float.parseFloat(scanner.nextLine().trim());
-                if (result < 0) {
-                    throw new NumberFormatException();
-                }
-                return result;
-            } catch (NumberFormatException e) {
-                System.err.println("Lương phải lớn hơn 0.");
-                System.out.print("Nhập lại: ");
-            }
-        }
-    }
 }
