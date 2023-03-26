@@ -19,8 +19,7 @@ VALUES
 
 -- employee table
 CREATE TABLE employee(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	employee_id VARCHAR(200) NOT NULL UNIQUE,
+	id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
 	full_name VARCHAR(200) NOT NULL,
 	position ENUM('manager','employee'),
 	age INT UNSIGNED,
@@ -37,14 +36,14 @@ CREATE TABLE employee(
 );
 
 
-INSERT INTO employee(employee_id, full_name, position, age, phone, email, hire_date, end_date, department_id,is_manager)
+INSERT INTO employee(full_name, position, age, phone, email, hire_date, end_date, department_id,is_manager)
 VALUES
-		('1', 'Pham Thi Thi', 'manager', 24, '1', 'thipt1@gmail.com','2023-09-22 16:47:08', NULL, 1, 1),
-		('2', 'Nguyen Thi Hoa', 'employee', 26, '2', 'hoant123@gmail.com', '2022-09-22 16:47:08', NULL, 1, null),  
-		('3', 'Tran Thi Nga', 'employee', 25, '3', 'ngatran12@gmail.com','2021-09-22 16:47:08', NULL, 2, null),
-		('4', 'Tran Van Tien', 'manager', 34, '4', 'tiennv1@gmail.com', '2009-09-22 16:47:08',null ,2,1),
-		('5', 'Nguyen Van Viet', 'manager', 23, '5', 'vietnt14@gmail.com', '2022-09-22 16:47:08', NULL, 3,1),
-		('6', 'Nguyen Thi Trang', 'employee', 26, '6', 'trang@gmail.com', '2020-09-22 16:47:08', NULL, 3,null);
+		('Pham Thi Thi', 'manager', 24, '1', 'thipt1@gmail.com','2023-09-22 16:47:08', NULL, 1, 1),
+		( 'Nguyen Thi Hoa', 'employee', 26, '2', 'hoant123@gmail.com', '2022-09-22 16:47:08', NULL, 1, null),  
+		('Tran Thi Nga', 'employee', 25, '3', 'ngatran12@gmail.com','2021-09-22 16:47:08', NULL, 2, null),
+		('Tran Van Tien', 'manager', 34, '4', 'tiennv1@gmail.com', '2009-09-22 16:47:08',null ,2,1),
+		( 'Nguyen Van Viet', 'manager', 23, '5', 'vietnt14@gmail.com', '2022-09-22 16:47:08', NULL, 3,1),
+		( 'Nguyen Thi Trang', 'employee', 26, '6', 'trang@gmail.com', '2020-09-22 16:47:08', NULL, 3,null);
 	
 
 
