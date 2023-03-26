@@ -60,15 +60,15 @@ public class DepartmentDAO {
             if (!rs.next()) {
                 System.out.println("Không có dữ liệu!");
             } else {
-                System.out.println("------------------------------------------------------------------------------");
+                System.out.println("-------------------------------------------------------------------------------------------");
                 System.out.printf("%-8s", "|");
                 System.out.printf("%-20s", "Department ID");
                 System.out.printf("%-10s", "|");
                 System.out.printf("%-20s", "Department Name");
                 System.out.printf("%-12s", "|");
                 System.out.printf("%-20s", "Address");
-                System.out.printf("%-8s", "|");
-                System.out.println("------------------------------------------------------------------------------");
+                System.out.printf("%-8s\n", "|");
+                System.out.println("-------------------------------------------------------------------------------------------");
                 do {
                     String id = rs.getString("id");
                     String department_name = rs.getString("department_name");
@@ -81,14 +81,13 @@ public class DepartmentDAO {
                     }
                     System.out.printf("%-8s", "|");
                     System.out.printf("%-20s", id);
-                    System.out.printf("%-15s", "|");
-                    System.out.printf("%-30s", department_name);
+                    System.out.printf("%-10s", "|");
+                    System.out.printf("%-20s", department_name);
                     System.out.printf("%-12s", "|");
                     System.out.printf("%-20s", address);
-                    System.out.printf("%-8s", "|");
-                    System.out.println();
+                    System.out.printf("%-8s\n", "|");
                 } while (rs.next());
-                System.out.println("------------------------------------------------------------------------------");
+                System.out.println("-------------------------------------------------------------------------------------------");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -108,11 +107,38 @@ public class DepartmentDAO {
             int count = sm.executeUpdate();
             if (count > 0) {
                 System.out.println("Thêm phòng ban thành công!");
+                // print department by id
+                System.out.println("-------------------------------------------------------------------------------------------");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", "Department ID");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Department Name");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Address");
+                System.out.printf("%-8s\n", "|");
+                System.out.println("-------------------------------------------------------------------------------------------");
+                int id = department.getDepartmentId();
+                String nameDept = department.getDepartmentName();
+                if (nameDept == null) {
+                    nameDept = "--";
+                }
+                String address = department.getAddress();
+                if (address == null) {
+                    address = "--";
+                }
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", id);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", nameDept);
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", address);
+                System.out.printf("%-8s\n", "|");
+                System.out.println("-------------------------------------------------------------------------------------------");
+
             } else {
                 System.out.println("Thêm phòng ban thất bại!");
             }
-            sm.close();
-            con.close();
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -120,7 +146,6 @@ public class DepartmentDAO {
     }
 
     public void updateDepartment() {
-        Scanner scanner = new Scanner(System.in);
         String sql = "UPDATE department SET department_name = ?, address=? WHERE id = ?";
         try {
             Connection con = null;
@@ -134,7 +159,33 @@ public class DepartmentDAO {
             sm.executeUpdate();
             int count = sm.executeUpdate();
             if (count > 0) {
-                System.out.println("Cập nhật phòng ban thành công.");
+                System.out.println("Dữ liệu cập nhật phòng ban sau khi cập nhật:");
+                System.out.println("-------------------------------------------------------------------------------------------");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", "Department ID");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Department Name");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Address");
+                System.out.printf("%-8s\n", "|");
+                System.out.println("-------------------------------------------------------------------------------------------");
+                int id = department.getDepartmentId();
+                String nameDept = department.getDepartmentName();
+                if (nameDept == null) {
+                    nameDept = "--";
+                }
+                String address = department.getAddress();
+                if (address == null) {
+                    address = "--";
+                }
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", id);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", nameDept);
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", address);
+                System.out.printf("%-8s\n", "|");
+                System.out.println("-------------------------------------------------------------------------------------------");
             } else {
                 System.out.println("Cập nhật phòng ban thất bại.");
             }
@@ -153,7 +204,7 @@ public class DepartmentDAO {
             PreparedStatement sm = con.prepareStatement(sql);
             sm.setInt(1, department.getDepartmentId());
             sm.executeUpdate();
-            System.out.println("Xoá phòng ban thành công!");
+            System.out.println("Xoá phòng ban thành công.");
 
         } catch (SQLException e) {
             e.getMessage();

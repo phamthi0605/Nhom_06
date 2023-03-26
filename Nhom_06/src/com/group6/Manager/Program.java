@@ -1,5 +1,6 @@
 package com.group6.Manager;
 
+import com.group6.DAL.DepartmentDAO;
 import com.group6.DAL.EmployeeDAO;
 import com.group6.DAL.StatisticalDAO;
 import com.group6.Entity.Admin;
@@ -64,7 +65,6 @@ public class Program {
                                 if (optionEmp == 1) {
                                     System.out.println("Hiển thị danh sách nhân viên");
                                     EmployeeDAO.getList();
-
                                 }
                                 if (optionEmp == 2) {
                                     FunctionEmployee.addEmployee();
@@ -102,6 +102,7 @@ public class Program {
                                 }
                                 if (optionDept == 2) {
                                     FunctionDepartment.addDepartment();
+
                                 }
                                 if (optionDept == 3) {
                                     FunctionDepartment.updateDepartment();
@@ -197,7 +198,7 @@ public class Program {
         System.out.println("\t3.Cập nhật thông tin phòng ban");
         System.out.println("\t4.Xoá phòng ban");//chưa làm được
         System.out.println("\t5.Xoá nhân viên từ phòng ban");
-        System.out.println("\t6.Chuyển phòng ban");
+        System.out.println("\t6.Điều chuyển nhân viên từ phòng ban");
         System.out.println("\t7.Thêm phòng ban cho nhân viên");
         System.out.println("\t8.Thoát");
     }

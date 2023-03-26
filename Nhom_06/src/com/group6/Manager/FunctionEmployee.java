@@ -545,18 +545,21 @@ public class FunctionEmployee {
         System.out.println("Tìm kiếm nhân viên theo bất kì mã, tên, số điện thoại hoặc email: ");
         Employee searchEmp = new Employee();
         System.out.println("Nhập mã nhân viên muốn tìm kiếm: ");
-        String employeeID = scanner.nextLine();
+        String employeeID = Validation.checkInputString();
         searchEmp.setEmployee_id(employeeID);
         System.out.println("Nhập tên nhân viên muốn tìm kiếm: ");
-        String fullName = scanner.nextLine();
+        String fullName = Validation.checkInputString();
         searchEmp.setFullName(fullName);
         System.out.println("Nhập số điện thoại muốn tìm kiếm: ");
-        String phone = scanner.nextLine();
+        String phone = Validation.checkInputString();
         searchEmp.setPhoneNumber(phone);
         System.out.println("Nhập email muốn tìm kiếm: ");
-        String email = scanner.nextLine();
+        String email = Validation.checkInputString();
         searchEmp.setEmail(email);
         EmployeeDAO managementEmployee = new EmployeeDAO(searchEmp);
-        managementEmployee.searchEmployee();
+        if (Validation.checkInputYN()) {
+            managementEmployee.searchEmployee();
+        }
+
     }
 }
