@@ -21,12 +21,6 @@ public class FunctionEmployee {
         while (true) {
             Employee employee = new Employee();
             System.out.println("Thêm nhân viên mới");
-//            System.out.println("Mã nhân viên: ");
-//            String employeeId = Validation.checkInputString();
-//            if (!Validation.checkEmployeeById(employeeList, employeeId)) {
-//                System.err.println("Nhân viên " + employeeId + " đã tồn tại. Nhập lại mã nhân viên: ");
-//                continue;
-//            }
             System.out.println("Họ và tên: ");
             String fullName = Validation.checkInputString();
             // nhập phòng ban cho nhân viên

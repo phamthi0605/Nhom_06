@@ -69,12 +69,9 @@ public class EmployeeDAO {
                     " '" + employee.getDepartment_id() + "', " + employee.getIs_manager() + ")";
 
             PreparedStatement sm = con.prepareStatement(sql);
-            int count = sm.executeUpdate();
-            if (count > 0) {
-                System.out.println("Thêm nhân viên thành công!");
-            } else {
-                System.out.println("Thêm nhân viên thất bại!");
-            }
+            sm.executeUpdate();
+            System.out.println("Thêm nhân viên mới thành công!");
+
             sm.close();
             con.close();
 
@@ -228,8 +225,104 @@ public class EmployeeDAO {
 
             PreparedStatement sm = con.prepareStatement(sql);
             sm.setString(1, employee.getEmployee_id());
-            sm.executeUpdate();
-            System.out.println("Xoá nhân viên thành công!");
+            int count = sm.executeUpdate();
+            if (count > 0) {
+                System.err.println("Xoá nhân viên: " + employee.getEmployee_id() + " thành công!");
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "-------------------------------------------------------------------------------------------" +
+                        "--------------");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", "Employee ID");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Full Name");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Postion");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-10s", "Age");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Phone");
+                System.out.printf("%-19s", "|");
+                System.out.printf("%-32s", "Email");
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", "Salary");
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", "Tax");
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", "Hire Date");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Department ID");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-23s", "Manager");
+                System.out.printf("%-16s\n", "|");
+                //System.out.printf("%-8s", "|");
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "-------------------------------------------------------------------------------------------" +
+                        "--------------");
+                String id = employee.getEmployee_id();
+                String fullName = employee.getFullName();
+                String position = employee.getPosition();
+                int age = employee.getAge();
+                String phone = employee.getPhoneNumber();
+                if (phone == null) {
+                    phone = "--";
+                }
+                String email = employee.getEmail();
+                if (email == null) {
+                    email = "--";
+                }
+                float salary = employee.getSalary();
+
+
+                float tax = employee.getPerson_Income_Tax();
+
+                String isManager = employee.getIs_manager();
+                if (isManager == null) {
+                    isManager = "--";
+                }
+                String hireDate = employee.getHire_date();
+
+                int deptID = employee.getDepartment_id();
+                if (isManager == null) {
+                    isManager = "--";
+                }
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", id);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", fullName);
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", position);
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-10s", age);
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", phone);
+                System.out.printf("%-19s", "|");
+                System.out.printf("%-32s", email);
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", format(salary));
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", format(tax));
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", hireDate);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", deptID);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-23s", isManager);
+                System.out.printf("%-8s", "|");
+                System.out.println();
+
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "-------------------------------------------------------------------------------------------" +
+                        "--------------");
+            } else {
+                System.err.println("Xoá nhân viên: " + employee.getEmployee_id() + " thất bại!");
+            }
+
         } catch (SQLException e) {
             e.getMessage();
         }
@@ -682,104 +775,9 @@ public class EmployeeDAO {
             stmt.setString(10, employee.getIs_manager());
 
             stmt.setString(11, employee.getEmployee_id());
-
             stmt.executeUpdate();
-            int count = stmt.executeUpdate();
-            if (count > 0) {
-                System.out.println("------------------------------------------------------------------------------" +
-                        "------------------------------------------------------------------------------------------" +
-                        "-----------------------------------------------------------------------------------------" +
-                        "-------------------------------------------------------------------------------------------" +
-                        "--------------");
-                System.out.printf("%-8s", "|");
-                System.out.printf("%-20s", "Employee ID");
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-20s", "Full Name");
-                System.out.printf("%-12s", "|");
-                System.out.printf("%-20s", "Postion");
-                System.out.printf("%-8s", "|");
-                System.out.printf("%-10s", "Age");
-                System.out.printf("%-12s", "|");
-                System.out.printf("%-20s", "Phone");
-                System.out.printf("%-19s", "|");
-                System.out.printf("%-32s", "Email");
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", "Salary");
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", "Tax");
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", "Hire Date");
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-20s", "Department ID");
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-23s", "Manager");
-                System.out.printf("%-16s\n", "|");
-                //System.out.printf("%-8s", "|");
-                System.out.println("------------------------------------------------------------------------------" +
-                        "------------------------------------------------------------------------------------------" +
-                        "-----------------------------------------------------------------------------------------" +
-                        "-------------------------------------------------------------------------------------------" +
-                        "--------------");
-                String id = employee.getEmployee_id();
-                String fullName = employee.getFullName();
-                String position = employee.getPosition();
-                int age = employee.getAge();
-                String phone = employee.getPhoneNumber();
-                if (phone == null) {
-                    phone = "--";
-                }
-                String email = employee.getEmail();
-                if (email == null) {
-                    email = "--";
-                }
-                float salary = employee.getSalary();
+            System.out.println("Thêm phòng ban cho nhân viên thất bại!");
 
-
-                float tax = employee.getPerson_Income_Tax();
-
-                String isManager = employee.getIs_manager();
-                if (isManager == null) {
-                    isManager = "--";
-                }
-                String hireDate = employee.getHire_date();
-
-                int deptID = employee.getDepartment_id();
-                if (isManager == null) {
-                    isManager = "--";
-                }
-                System.out.printf("%-8s", "|");
-                System.out.printf("%-20s", id);
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-20s", fullName);
-                System.out.printf("%-12s", "|");
-                System.out.printf("%-20s", position);
-                System.out.printf("%-8s", "|");
-                System.out.printf("%-10s", age);
-                System.out.printf("%-12s", "|");
-                System.out.printf("%-20s", phone);
-                System.out.printf("%-19s", "|");
-                System.out.printf("%-32s", email);
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", format(salary));
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", format(tax));
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", hireDate);
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-20s", deptID);
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-23s", isManager);
-                System.out.printf("%-8s", "|");
-                System.out.println();
-
-                System.out.println("------------------------------------------------------------------------------" +
-                        "------------------------------------------------------------------------------------------" +
-                        "-----------------------------------------------------------------------------------------" +
-                        "-------------------------------------------------------------------------------------------" +
-                        "--------------");
-            } else {
-                System.out.println("Thêm phòng ban cho nhân viên thất bại!");
-            }
             stmt.close();
             con.close();
 

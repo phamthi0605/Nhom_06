@@ -65,8 +65,7 @@ public class Program {
                                 }
                                 if (optionEmp == 2) {
                                     FunctionEmployee.addEmployee();
-                                    System.out.println("Danh sách nhân viên sau khi thêm mới: ");
-                                    EmployeeDAO.getList();
+
                                 }
                                 if (optionEmp == 3) {
                                     FunctionEmployee.updateEmployee();
