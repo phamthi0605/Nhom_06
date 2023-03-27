@@ -81,8 +81,16 @@ public class FunctionDepartment {
         getListDepartment();
         while (true) {
             System.out.println("Nhập mã phòng ban cần cập nhật: ");
-            int deptId = Validation.checkInputInt();
-            List<Department> listFindDeptByID = managementDepartment.getListDepartmentById(departmentList, deptId);
+            int depID = Validation.checkInputInt();
+            List<Integer> listCheck = new ArrayList<>();
+            for (int i = 0; i < departmentList.size(); i++) {
+                listCheck.add(departmentList.get(i).getDepartmentId());
+            }
+            while (!listCheck.contains(depID)) {
+                System.err.println("Bạn chỉ được phép chọn những bộ phận có trong danh sách!");
+                depID = Validation.checkInputInt();
+            }
+            List<Department> listFindDeptByID = managementDepartment.getListDepartmentById(departmentList, depID);
             if (listFindDeptByID.isEmpty()) {
                 System.err.println("Không có bộ phận này!");
                 continue;
@@ -98,14 +106,6 @@ public class FunctionDepartment {
                 System.out.printf("%-8s\n", "|");
                 System.out.println("-------------------------------------------------------------------------------------------");
                 for (Department department : listFindDeptByID) {
-                    System.out.printf("%-8s", "|");
-                    System.out.printf("%-20s", "Department ID");
-                    System.out.printf("%-10s", "|");
-                    System.out.printf("%-20s", "Department Name");
-                    System.out.printf("%-12s", "|");
-                    System.out.printf("%-20s", "Address");
-                    System.out.printf("%-8s\n", "|");
-                    System.out.println("-------------------------------------------------------------------------------------------");
                     int id = department.getDepartmentId();
                     String department_name = department.getDepartmentName();
                     if (department_name == null) {
@@ -129,12 +129,12 @@ public class FunctionDepartment {
                 System.out.println("Địa chỉ: ");
                 String addressUpdate = Validation.checkInputString();
                 //check employee change or not
-                if (!Validation.checkchangeInforDepartment(listFindDeptByID.get(0), deptId, deptNameUpdate, addressUpdate)) {
+                if (!Validation.checkchangeInforDepartment(listFindDeptByID.get(0), depID, deptNameUpdate, addressUpdate)) {
                     System.err.println("Dữ liệu không thay đổi");
                 }
                 if (Validation.checkInputYN()) {
                     //update department
-                    Department department = new Department(deptId, deptNameUpdate, addressUpdate);
+                    Department department = new Department(depID, deptNameUpdate, addressUpdate);
                     DepartmentDAO managementEmployee = new DepartmentDAO(department);
                     managementEmployee.updateDepartment();
                 }
@@ -311,7 +311,6 @@ public class FunctionDepartment {
         System.out.println("Xoá nhân viên từ phòng ban");
         // Tìm kiếm những nhân viên cùng 1 phòng ban
         Employee employee = new Employee();
-        System.out.println("Danh sách các phòng ban");
         List<Department> departmentList = managementDepartment.getListDepartment();
         getListDepartment();
         System.out.println("Nhập mã phòng ban: ");
@@ -474,8 +473,6 @@ public class FunctionDepartment {
     public static void transferDepartmentForEmployee() {
         Employee employee = new Employee();
         System.out.println("Điều chuyển phòng ban cho nhân viên");
-
-        System.out.println("Danh sách các phòng ban");
         List<Department> departmentList = managementDepartment.getListDepartment();
         getListDepartment();
 
@@ -771,37 +768,275 @@ public class FunctionDepartment {
         // Update thông tin cho nhân viên đó
         System.out.println("Danh sách nhân viên chưa có phòng ban nào: ");
         List<Employee> listEmployeeDeptIsNull = managementDepartment.listEmployeeDeptIsNull();
-        System.out.printf("%-15s%-20s%-15s%-10s%-16s%-25s%-20s%-20s%-25s%-26s%-20s%-10s\n", "EmployeeID", "FullName", "Position", "Age", "Phone", "Email", "Salary", "Tax", "Hire Date", "End Date", "DepartmentID", "IsManager");
-        for (Employee emp : listEmployeeDeptIsNull) {
-            emp.showData();
-        }
-        System.out.println("Nhập mã nhân viên: ");
-        String empID = Validation.checkInputString();
-        List<String> listCheckId = new ArrayList<>();
+        if (listEmployeeDeptIsNull.isEmpty()) {
+            System.err.println("Tất cả phòng ban đều có nhân viên! ");
+        } else {
+            System.out.println("------------------------------------------------------------------------------" +
+                    "------------------------------------------------------------------------------------------" +
+                    "-----------------------------------------------------------------------------------------" +
+                    "-------------------------------------------------------------------------------------------" +
+                    "--------------");
+            System.out.printf("%-8s", "|");
+            System.out.printf("%-20s", "Employee ID");
+            System.out.printf("%-10s", "|");
+            System.out.printf("%-20s", "Full Name");
+            System.out.printf("%-12s", "|");
+            System.out.printf("%-20s", "Postion");
+            System.out.printf("%-8s", "|");
+            System.out.printf("%-10s", "Age");
+            System.out.printf("%-12s", "|");
+            System.out.printf("%-20s", "Phone");
+            System.out.printf("%-19s", "|");
+            System.out.printf("%-32s", "Email");
+            System.out.printf("%-13s", "|");
+            System.out.printf("%-23s", "Salary");
+            System.out.printf("%-13s", "|");
+            System.out.printf("%-23s", "Tax");
+            System.out.printf("%-13s", "|");
+            System.out.printf("%-23s", "Hire Date");
+            System.out.printf("%-10s", "|");
+            System.out.printf("%-20s", "Department ID");
+            System.out.printf("%-10s", "|");
+            System.out.printf("%-23s", "Manager");
+            System.out.printf("%-16s\n", "|");
+            System.out.println("------------------------------------------------------------------------------" +
+                    "------------------------------------------------------------------------------------------" +
+                    "-----------------------------------------------------------------------------------------" +
+                    "-------------------------------------------------------------------------------------------" +
+                    "--------------");
+            for (Employee findEmployee : listEmployeeDeptIsNull) {
+                String id = findEmployee.getEmployee_id();
+                String fullName = findEmployee.getFullName();
+                if (fullName == null) {
+                    fullName = "--";
+                }
+                String position = findEmployee.getPosition();
+                if (position == null) {
+                    position = "--";
+                }
+                int age = findEmployee.getAge();
+                String ageStr = String.valueOf(age);
+                if (age == 0) {
+                    ageStr = "--";
+                }
+                String phone = findEmployee.getPhoneNumber();
+                if (phone == null) {
+                    phone = "--";
+                }
+                String email = findEmployee.getEmail();
+                if (email == null) {
+                    email = "--";
+                }
+                float salary = findEmployee.getSalary();
+                String displaySalary = String.valueOf(salary);
+                if (salary == 0) {
+                    displaySalary = "--";
+                }
+                if (salary > 0) {
+                    displaySalary = format(salary);
+                }
+                // displaySalary = format(salary);
 
-        for (int i = 0; i < listEmployeeDeptIsNull.size(); i++) {
-            listCheckId.add(listEmployeeDeptIsNull.get(i).getEmployee_id());
-        }
-        while (!listCheckId.contains(empID)) {
-            System.out.println("Bạn chỉ được phép chọn nhân viên có trong danh sách bên trên!");
-            empID = Validation.checkInputString();
-        }
-        System.out.println("Thông tin của nhân viên trước khi cập nhật: ");
-        Employee employee = new Employee();
-        employee.setEmployee_id(empID);
-        EmployeeDAO managementEmployee = new EmployeeDAO(employee);
-        List<Employee> list = managementEmployee.getListEmployee();
-        List<Employee> employeeList = managementEmployee.getListEmployeeById(list, empID);
-        for (Employee obj : employeeList) {
-            obj.showData();
-            if (Validation.checkInputYN()) {
+                float tax = findEmployee.getPerson_Income_Tax();
+                String convertTax = String.valueOf(tax);
+                if (tax == 0) {
+                    convertTax = "--";
+                }
+                if (tax > 0) {
+                    convertTax = format(tax);
+                }
+
+                String isManager = findEmployee.getIs_manager();
+                if (isManager == null) {
+                    isManager = "--";
+                }
+                String hireDate = findEmployee.getHire_date();
+
+                int deptID = findEmployee.getDepartment_id();
+                if (isManager == null) {
+                    isManager = "--";
+                }
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", id);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", fullName);
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", position);
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-10s", ageStr);
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", phone);
+                System.out.printf("%-19s", "|");
+                System.out.printf("%-32s", email);
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", displaySalary);
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", convertTax);
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", hireDate);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", deptID);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-23s", isManager);
+                System.out.printf("%-8s", "|");
+                System.out.println();
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "-------------------------------------------------------------------------------------------" +
+                        "--------------");
+            }
+            System.out.println("Nhập mã nhân viên: ");
+            String empID = Validation.checkInputString();
+            List<String> listCheckId = new ArrayList<>();
+
+            for (int i = 0; i < listEmployeeDeptIsNull.size(); i++) {
+                listCheckId.add(listEmployeeDeptIsNull.get(i).getEmployee_id());
+            }
+            while (!listCheckId.contains(empID)) {
+                System.out.println("Bạn chỉ được phép chọn nhân viên có trong danh sách bên trên!");
+                empID = Validation.checkInputString();
+            }
+            System.out.println("Thông tin của nhân viên trước khi cập nhật: ");
+            Employee employee = new Employee();
+            employee.setEmployee_id(empID);
+            EmployeeDAO managementEmployee = new EmployeeDAO(employee);
+            List<Employee> list = managementEmployee.getListEmployee();
+            List<Employee> employeeList = managementEmployee.getListEmployeeById(list, empID);
+            for (Employee findEmployee : employeeList) {
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "-------------------------------------------------------------------------------------------" +
+                        "--------------");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", "Employee ID");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Full Name");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Postion");
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-10s", "Age");
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", "Phone");
+                System.out.printf("%-19s", "|");
+                System.out.printf("%-32s", "Email");
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", "Salary");
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", "Tax");
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", "Hire Date");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", "Department ID");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-23s", "Manager");
+                System.out.printf("%-16s\n", "|");
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "-------------------------------------------------------------------------------------------" +
+                        "--------------");
+                String id = findEmployee.getEmployee_id();
+                String fullName = findEmployee.getFullName();
+                if (fullName == null) {
+                    fullName = "--";
+                }
+                String position = findEmployee.getPosition();
+                if (position == null) {
+                    position = "--";
+                }
+                int age = findEmployee.getAge();
+                String ageStr = String.valueOf(age);
+                if (age == 0) {
+                    ageStr = "--";
+                }
+                String phone = findEmployee.getPhoneNumber();
+                if (phone == null) {
+                    phone = "--";
+                }
+                String email = findEmployee.getEmail();
+                if (email == null) {
+                    email = "--";
+                }
+                float salary = findEmployee.getSalary();
+                String displaySalary = String.valueOf(salary);
+                if (salary == 0) {
+                    displaySalary = "--";
+                }
+                if (salary > 0) {
+                    displaySalary = format(salary);
+                }
+                // displaySalary = format(salary);
+
+                float tax = findEmployee.getPerson_Income_Tax();
+                String convertTax = String.valueOf(tax);
+                if (tax == 0) {
+                    convertTax = "--";
+                }
+                if (tax > 0) {
+                    convertTax = format(tax);
+                }
+
+                String isManager = findEmployee.getIs_manager();
+                if (isManager == null) {
+                    isManager = "--";
+                }
+                String hireDate = findEmployee.getHire_date();
+
+                int deptID = findEmployee.getDepartment_id();
+                if (isManager == null) {
+                    isManager = "--";
+                }
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-20s", id);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", fullName);
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", position);
+                System.out.printf("%-8s", "|");
+                System.out.printf("%-10s", ageStr);
+                System.out.printf("%-12s", "|");
+                System.out.printf("%-20s", phone);
+                System.out.printf("%-19s", "|");
+                System.out.printf("%-32s", email);
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", displaySalary);
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", convertTax);
+                System.out.printf("%-13s", "|");
+                System.out.printf("%-23s", hireDate);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-20s", deptID);
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-23s", isManager);
+                System.out.printf("%-8s", "|");
+                System.out.println();
+                System.out.println("------------------------------------------------------------------------------" +
+                        "------------------------------------------------------------------------------------------" +
+                        "-----------------------------------------------------------------------------------------" +
+                        "-------------------------------------------------------------------------------------------" +
+                        "--------------");
                 System.out.println("Nhập phòng ban muốn thêm nhân viên: " + empID + ":");
-                int deptId = Validation.checkInputInt();
-                obj.setDepartment_id(deptId);
-                EmployeeDAO manageUpdate = new EmployeeDAO(obj);
-                manageUpdate.addDepartForEmployee();
+                getListDepartment();
+                List<Department> departmentList = managementDepartment.getListDepartment();
+                int depID = Validation.checkInputInt();
+                List<Integer> listCheck = new ArrayList<>();
+                for (int i = 0; i < departmentList.size(); i++) {
+                    listCheck.add(departmentList.get(i).getDepartmentId());
+                }
+                while (!listCheck.contains(depID)) {
+                    System.err.println("Bạn chỉ được phép chọn những bộ phận có trong danh sách!");
+                    depID = Validation.checkInputInt();
+                }
+                findEmployee.setDepartment_id(depID);
+                EmployeeDAO manageUpdate = new EmployeeDAO(findEmployee);
+                if (Validation.checkInputYN()) {
+                    manageUpdate.addDepartForEmployee();
+                }
             }
         }
-
     }
+
 }
+

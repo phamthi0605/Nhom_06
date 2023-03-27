@@ -278,17 +278,11 @@ public class FunctionEmployee {
                 continue;
             } else {
                 System.out.println("Kết quả tìm kiếm: ");
-//                System.out.printf("%-15s%-25s%-15s%-10s%-16s%-25s%-20s%-20s%-25s%-26s%-20s%-10s\n", "EmployeeID", "FullName", "Position", "Age", "Phone", "Email", "Salary", "Tax", "Hire Date", "End Date", "DepartmentID", "IsManager");
-//                for (Employee employee : listFindEmployee) {
-//                    employee.showData();
-//                }
-                // Thông tin nhân viên tìm thấy theo employeeID
                 System.out.println("------------------------------------------------------------------------------" +
                         "------------------------------------------------------------------------------------------" +
                         "-----------------------------------------------------------------------------------------" +
                         "-------------------------------------------------------------------------------------------" +
                         "--------------");
-                //   System.out.printf("|\t" + "%-21s%-20s%-20s%-20s%-20s%-30s%-20s%-20s%-20s\n", "Employee ID\t|", "Full Name\t\t|", "Position\t|", "Age\t|", "Phone\t|", "Email\t|", "Salary\t|", "Manager\t|", "Department Name\t|");
                 System.out.printf("%-8s", "|");
                 System.out.printf("%-20s", "Employee ID");
                 System.out.printf("%-10s", "|");
@@ -312,7 +306,6 @@ public class FunctionEmployee {
                 System.out.printf("%-10s", "|");
                 System.out.printf("%-23s", "Manager");
                 System.out.printf("%-16s\n", "|");
-                //System.out.printf("%-8s", "|");
                 System.out.println("------------------------------------------------------------------------------" +
                         "------------------------------------------------------------------------------------------" +
                         "-----------------------------------------------------------------------------------------" +
@@ -543,23 +536,12 @@ public class FunctionEmployee {
 
     public static void searchEmployee() {
         System.out.println("Tìm kiếm nhân viên theo bất kì mã, tên, số điện thoại hoặc email: ");
-        Employee searchEmp = new Employee();
-        System.out.println("Nhập mã nhân viên muốn tìm kiếm: ");
-        String employeeID = Validation.checkInputString();
-        searchEmp.setEmployee_id(employeeID);
-        System.out.println("Nhập tên nhân viên muốn tìm kiếm: ");
-        String fullName = Validation.checkInputString();
-        searchEmp.setFullName(fullName);
-        System.out.println("Nhập số điện thoại muốn tìm kiếm: ");
-        String phone = Validation.checkInputString();
-        searchEmp.setPhoneNumber(phone);
-        System.out.println("Nhập email muốn tìm kiếm: ");
-        String email = Validation.checkInputString();
-        searchEmp.setEmail(email);
-        EmployeeDAO managementEmployee = new EmployeeDAO(searchEmp);
+        System.out.println("Nhập thông tin muốn tìm kiếm: ");
+        String findInfor = Validation.checkInputString();
         if (Validation.checkInputYN()) {
-            managementEmployee.searchEmployee();
+            managementEmployee.searchEmployee(findInfor);
         }
+
 
     }
 }

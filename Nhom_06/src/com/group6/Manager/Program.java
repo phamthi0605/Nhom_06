@@ -1,12 +1,9 @@
 package com.group6.Manager;
 
-import com.group6.DAL.DepartmentDAO;
 import com.group6.DAL.EmployeeDAO;
 import com.group6.DAL.StatisticalDAO;
 import com.group6.Entity.Admin;
-import com.group6.Entity.Employee;
 
-import java.util.Map;
 import java.util.Scanner;
 
 public class Program {

@@ -236,26 +236,25 @@ public class EmployeeDAO {
     }
 
 
-    public ResultSet searchEmployee() {
+    public ResultSet searchEmployee(String str) {
         Connection con = null;
         DBContext db = new DBContext();
         con = db.getConnection();
         ResultSet rs = null;
         try {
-            PreparedStatement ptm = con.prepareStatement("select * from employee where id = ? or full_name like ? or phone like ? or email like ? ");
-            ptm.setString(1, employee.getEmployee_id());
-            ptm.setString(2, "%" + employee.getFullName());
-            ptm.setString(3, "%" + employee.getPhoneNumber());
-            ptm.setString(4, "%" + employee.getEmail());
+            PreparedStatement ptm = con.prepareStatement("select * from employee where id like ? or full_name like ? or phone like ? or email like ? ");
+            ptm.setString(1, "%" + str + "%");
+            ptm.setString(2, "%" + str + "%");
+            ptm.setString(3, "%" + str + "%");
+            ptm.setString(4, "%" + str + "%");
             rs = ptm.executeQuery();
             if (rs.next() == false) {
                 System.out.println("Không có dữ liệu!");
             } else {
                 System.out.println("------------------------------------------------------------------------------" +
                         "------------------------------------------------------------------------------------------" +
-                        "-----------------------------------------------------------------------------------------" +
-                        "----------------------------------");
-                //   System.out.printf("|\t" + "%-21s%-20s%-20s%-20s%-20s%-30s%-20s%-20s%-20s\n", "Employee ID\t|", "Full Name\t\t|", "Position\t|", "Age\t|", "Phone\t|", "Email\t|", "Salary\t|", "Manager\t|", "Department Name\t|");
+                        "-----------------------------------------------------------------------------------------");
+                System.out.println("Kết quả tìm kiếm: ");
                 System.out.printf("%-8s", "|");
                 System.out.printf("%-20s", "Employee ID");
                 System.out.printf("%-10s", "|");
@@ -276,8 +275,7 @@ public class EmployeeDAO {
 
                 System.out.println("------------------------------------------------------------------------------" +
                         "------------------------------------------------------------------------------------------" +
-                        "-----------------------------------------------------------------------------------------" +
-                        "----------------------------------");
+                        "-----------------------------------------------------------------------------------------");
                 do {
                     String id = rs.getString("id");
                     String fullName = rs.getString("full_name");
@@ -317,8 +315,7 @@ public class EmployeeDAO {
                 } while (rs.next());
                 System.out.println("------------------------------------------------------------------------------" +
                         "------------------------------------------------------------------------------------------" +
-                        "-----------------------------------------------------------------------------------------" +
-                        "----------------------------------");
+                        "-----------------------------------------------------------------------------------------");
             }
 
         } catch (SQLException e) {
@@ -346,7 +343,7 @@ public class EmployeeDAO {
                 System.out.println("------------------------------------------------------------------------------" +
                         "------------------------------------------------------------------------------------------" +
                         "-----------------------------------------------------------------------------------------" +
-                        "----------------------------------");
+                        "--------------");
                 //   System.out.printf("|\t" + "%-21s%-20s%-20s%-20s%-20s%-30s%-20s%-20s%-20s\n", "Employee ID\t|", "Full Name\t\t|", "Position\t|", "Age\t|", "Phone\t|", "Email\t|", "Salary\t|", "Manager\t|", "Department Name\t|");
                 System.out.printf("%-8s", "|");
                 System.out.printf("%-20s", "Employee ID");
@@ -356,10 +353,10 @@ public class EmployeeDAO {
                 System.out.printf("%-20s", "Postion");
                 System.out.printf("%-8s", "|");
                 System.out.printf("%-10s", "Age");
-                System.out.printf("%-12s", "|");
-                System.out.printf("%-20s", "Phone");
-                System.out.printf("%-19s", "|");
-                System.out.printf("%-32s", "Email");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-18s", "Phone");
+                System.out.printf("%-10s", "|");
+                System.out.printf("%-25s", "Email");
                 System.out.printf("%-13s", "|");
                 System.out.printf("%-23s", "Salary");
                 System.out.printf("%-10s", "|");
@@ -367,11 +364,10 @@ public class EmployeeDAO {
                 System.out.printf("%-10s", "|");
                 System.out.printf("%-20s", "Department Name");
                 System.out.printf("%-16s\n", "|");
-                //System.out.printf("%-8s", "|");
                 System.out.println("------------------------------------------------------------------------------" +
                         "------------------------------------------------------------------------------------------" +
                         "-----------------------------------------------------------------------------------------" +
-                        "----------------------------------");
+                        "--------------");
                 do {
                     String id = rs.getString("id");
                     String fullName = rs.getString("full_name");
@@ -386,6 +382,9 @@ public class EmployeeDAO {
                         email = "--";
                     }
                     float salary = rs.getFloat("salary");
+                    String convertSalary = String.valueOf(salary);
+
+
                     String isManager = rs.getString("is_manager");
                     if (isManager == null) {
                         isManager = "--";
@@ -402,10 +401,10 @@ public class EmployeeDAO {
                     System.out.printf("%-20s", position);
                     System.out.printf("%-8s", "|");
                     System.out.printf("%-10s", age);
-                    System.out.printf("%-12s", "|");
-                    System.out.printf("%-20s", phone);
-                    System.out.printf("%-19s", "|");
-                    System.out.printf("%-32s", email);
+                    System.out.printf("%-10s", "|");
+                    System.out.printf("%-18s", phone);
+                    System.out.printf("%-10s", "|");
+                    System.out.printf("%-25s", email);
                     System.out.printf("%-13s", "|");
                     System.out.printf("%-23s", format(salary));
                     System.out.printf("%-10s", "|");
@@ -424,7 +423,7 @@ public class EmployeeDAO {
                 System.out.println("------------------------------------------------------------------------------" +
                         "------------------------------------------------------------------------------------------" +
                         "-----------------------------------------------------------------------------------------" +
-                        "----------------------------------");
+                        "--------------");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -658,7 +657,7 @@ public class EmployeeDAO {
         }
 
     }
-    
+
     public void addDepartForEmployee() {
         String sql = "UPDATE employee SET full_name = ?, position=?, age=?, phone =?, email = ?, " +
                 "salary =?, person_Income_Tax=?, hire_date=?, department_id=?, is_manager=?" +

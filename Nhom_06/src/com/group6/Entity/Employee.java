@@ -123,7 +123,7 @@ public class Employee {
         float result = 0;
         float check = salary - 11000000;
         if (check <= 0) {
-            result = 0;
+            result = 0;// không phải đóng thuế
         } else if (check > 0 && check <= 5000000) {
             result = (float) (check * 0.05);
         } else if (check > 5000000 && check <= 10000000) {

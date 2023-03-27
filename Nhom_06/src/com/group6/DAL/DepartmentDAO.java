@@ -231,11 +231,12 @@ public class DepartmentDAO {
             ResultSet rs = sm.executeQuery("SELECT * FROM employee\n" +
                     "WHERE department_id IS NULL");
             if (!rs.next()) {
-                System.out.println("Không có dữ liệu!");
+                System.out.println("Danh sách trống.");
             } else {
+                System.out.println("Danh nhân viên chưa có phòng ban nào:");
                 do {
                     Employee employee = new Employee(
-                            rs.getString("employee_id"),
+                            rs.getString("id"),
                             rs.getString("full_name"),
                             rs.getString("position"),
                             rs.getInt("age"),
