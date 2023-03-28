@@ -483,7 +483,7 @@ public class FunctionDepartment {
             listCheckDeptID.add(departmentList.get(i).getDepartmentId());
         }
         while (!listCheckDeptID.contains(deptId)) {
-            System.err.println("Bạn chỉ được phép chọn những bộ phận có trong danh sách!");
+            System.err.println("Bạn chỉ được phép chọn những bộ phận có trong danh sách!Nhập lại:");
             deptId = Validation.checkInputInt();
         }
         employee.setDepartment_id(deptId);

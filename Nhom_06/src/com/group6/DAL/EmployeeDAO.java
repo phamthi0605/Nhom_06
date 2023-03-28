@@ -7,10 +7,7 @@ import com.group6.Manager.Validation;
 
 import java.sql.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EmployeeDAO {
     private Employee employee;
@@ -71,6 +68,7 @@ public class EmployeeDAO {
             PreparedStatement sm = con.prepareStatement(sql);
             sm.executeUpdate();
             System.out.println("Thêm nhân viên mới thành công!");
+
 
             sm.close();
             con.close();
@@ -227,98 +225,7 @@ public class EmployeeDAO {
             sm.setString(1, employee.getEmployee_id());
             int count = sm.executeUpdate();
             if (count > 0) {
-                System.err.println("Xoá nhân viên: " + employee.getEmployee_id() + " thành công!");
-                System.out.println("------------------------------------------------------------------------------" +
-                        "------------------------------------------------------------------------------------------" +
-                        "-----------------------------------------------------------------------------------------" +
-                        "-------------------------------------------------------------------------------------------" +
-                        "--------------");
-                System.out.printf("%-8s", "|");
-                System.out.printf("%-20s", "Employee ID");
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-20s", "Full Name");
-                System.out.printf("%-12s", "|");
-                System.out.printf("%-20s", "Postion");
-                System.out.printf("%-8s", "|");
-                System.out.printf("%-10s", "Age");
-                System.out.printf("%-12s", "|");
-                System.out.printf("%-20s", "Phone");
-                System.out.printf("%-19s", "|");
-                System.out.printf("%-32s", "Email");
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", "Salary");
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", "Tax");
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", "Hire Date");
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-20s", "Department ID");
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-23s", "Manager");
-                System.out.printf("%-16s\n", "|");
-                //System.out.printf("%-8s", "|");
-                System.out.println("------------------------------------------------------------------------------" +
-                        "------------------------------------------------------------------------------------------" +
-                        "-----------------------------------------------------------------------------------------" +
-                        "-------------------------------------------------------------------------------------------" +
-                        "--------------");
-                String id = employee.getEmployee_id();
-                String fullName = employee.getFullName();
-                String position = employee.getPosition();
-                int age = employee.getAge();
-                String phone = employee.getPhoneNumber();
-                if (phone == null) {
-                    phone = "--";
-                }
-                String email = employee.getEmail();
-                if (email == null) {
-                    email = "--";
-                }
-                float salary = employee.getSalary();
-
-
-                float tax = employee.getPerson_Income_Tax();
-
-                String isManager = employee.getIs_manager();
-                if (isManager == null) {
-                    isManager = "--";
-                }
-                String hireDate = employee.getHire_date();
-
-                int deptID = employee.getDepartment_id();
-                if (isManager == null) {
-                    isManager = "--";
-                }
-                System.out.printf("%-8s", "|");
-                System.out.printf("%-20s", id);
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-20s", fullName);
-                System.out.printf("%-12s", "|");
-                System.out.printf("%-20s", position);
-                System.out.printf("%-8s", "|");
-                System.out.printf("%-10s", age);
-                System.out.printf("%-12s", "|");
-                System.out.printf("%-20s", phone);
-                System.out.printf("%-19s", "|");
-                System.out.printf("%-32s", email);
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", format(salary));
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", format(tax));
-                System.out.printf("%-13s", "|");
-                System.out.printf("%-23s", hireDate);
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-20s", deptID);
-                System.out.printf("%-10s", "|");
-                System.out.printf("%-23s", isManager);
-                System.out.printf("%-8s", "|");
-                System.out.println();
-
-                System.out.println("------------------------------------------------------------------------------" +
-                        "------------------------------------------------------------------------------------------" +
-                        "-----------------------------------------------------------------------------------------" +
-                        "-------------------------------------------------------------------------------------------" +
-                        "--------------");
+                System.out.println("Xoá nhân viên " + employee.getEmployee_id() + " thành công.");
             } else {
                 System.err.println("Xoá nhân viên: " + employee.getEmployee_id() + " thất bại!");
             }
@@ -475,7 +382,13 @@ public class EmployeeDAO {
                         email = "--";
                     }
                     float salary = rs.getFloat("salary");
-                    String convertSalary = String.valueOf(salary);
+                    String displaySalary = String.valueOf(salary);
+                    if (salary == 0) {
+                        displaySalary = "--";
+                    }
+                    if (salary > 0) {
+                        displaySalary = format(salary);
+                    }
 
 
                     String isManager = rs.getString("is_manager");
@@ -499,7 +412,7 @@ public class EmployeeDAO {
                     System.out.printf("%-10s", "|");
                     System.out.printf("%-25s", email);
                     System.out.printf("%-13s", "|");
-                    System.out.printf("%-23s", format(salary));
+                    System.out.printf("%-23s", displaySalary);
                     System.out.printf("%-10s", "|");
                     System.out.printf("%-23s", isManager);
                     System.out.printf("%-10s", "|");
@@ -789,41 +702,79 @@ public class EmployeeDAO {
 
     // Check (departmentID, isManager): unique
     // Kiểm tra xem nhân viên thuộc phòng ban này có là trưởng phòng ko
-    public String checkIsManager(int deptID, String deptManager) {
+//    public String checkIsManager(int deptID, String deptManager) {
+//        Connection con = null;
+////        DBContext db = new DBContext();
+//        con = db.getConnection();
+//        String isManager = null;// kết quả trả về
+//        if (deptManager.equals("y")) {
+//            Map<Integer, String> map = new HashMap<>();
+//            try {
+//                Statement sm = con.createStatement();
+//                ResultSet rs = sm.executeQuery("SELECT department_id,is_manager FROM employee");
+//                if (!rs.next()) {
+//                    System.out.println("Không có dữ liệu!");
+//                } else {
+//                    do {
+//                        map.put(rs.getInt("department_id"), rs.getString("is_manager"));
+//
+//                    } while (rs.next());
+//                }
+//            } catch (SQLException e) {
+//                e.getMessage();
+//            }
+//            for (Map.Entry<Integer, String> isManagerDept : map.entrySet()) {
+//                while (deptID == isManagerDept.getKey() && isManagerDept.getValue().equals("1")) {
+//                    System.err.println("Phòng ban: " + deptID + " đã có trưởng phòng!");
+//                    System.out.println("Nhập lại (Yes/No): ");
+//                    deptManager = Validation.checkInputString();
+//
+//                }
+//                if (deptManager.equals("n")) {
+//                    return null; // 1-1: 1 phòng ban chỉ có 1 quản lý ,1-0: dân đen
+//                }
+//                if (deptManager.equals("y")) {
+//                    return "1";
+//                }
+//
+//            }
+//            return "'1'";
+//        }
+//        return null;
+//    }
+    public String checkIsManager(int deptId, String checkManager) {
+        String isManager = null;
         Connection con = null;
         DBContext db = new DBContext();
         con = db.getConnection();
-        String isManager = null;// kết quả trả về
-        if (deptManager.equals("y")) {
-            Map<Integer, String> map = new HashMap<>();
-            try {
-                Statement sm = con.createStatement();
-                ResultSet rs = sm.executeQuery("SELECT department_id,is_manager FROM employee");
-                if (!rs.next()) {
-                    System.out.println("Không có dữ liệu!");
-                } else {
-                    do {
-                        map.put(rs.getInt("department_id"), rs.getString("is_manager"));
+        if (checkManager.equals("y")) {
+            Map<Integer, String> mapManager = new HashMap<>();
 
-                    } while (rs.next());
+            try {
+                Statement statement = con.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT department_id, is_manager FROM employee");
+
+                while (resultSet.next()) {
+                    mapManager.put(resultSet.getInt("department_id"),
+                            resultSet.getString("is_manager"));
                 }
             } catch (SQLException e) {
-                e.getMessage();
+                e.printStackTrace();
             }
-            for (Map.Entry<Integer, String> isManagerDept : map.entrySet()) {
-                while (deptID == isManagerDept.getKey() && isManagerDept.getValue().equals("1")) {
-                    System.err.println("Phòng ban: " + deptID + " đã có trưởng phòng!");
+
+            for (Map.Entry<Integer, String> entry : mapManager.entrySet()) {
+                while (deptId == entry.getKey() && entry.getValue().equals("1")) {
+                    System.err.println("Phòng ban: " + deptId + " đã có trưởng phòng!");
                     System.out.println("Nhập lại (Yes/No): ");
-                    deptManager = Validation.checkInputString();
-                    if (deptManager.equals("n")) {
-                        return null; // 1-1: 1 phòng ban chỉ có 1 quản lý ,1-0: dân đen
+                    checkManager = Validation.checkInputString();
+                    if (checkManager.equals("n")) {
+                        return null;
                     }
                 }
-
             }
-            return "1";
+            return "'1'";
         }
-        return null;
+        return isManager;
     }
 
     public boolean isManager(int deptID, String deptManager) {

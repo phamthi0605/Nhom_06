@@ -35,6 +35,19 @@ CREATE TABLE employee(
 	FOREIGN KEY (department_id) REFERENCES department(id) -- 1 phòng ban có nhiều nhân viên
 );
 
+-- bảng admin
+CREATE TABLE admin(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	full_name VARCHAR(200),
+	username VARCHAR(200),
+	password VARCHAR(200)		
+);
+
+INSERT INTO admin(full_name, username, password)
+VALUES
+	('phamthi', 'thipt1', '1234');
+	
+	
 
 INSERT INTO employee(full_name, position, age, phone, email, hire_date, end_date, department_id,is_manager)
 VALUES
@@ -47,15 +60,4 @@ VALUES
 	
 
 
--- bảng admin
-CREATE TABLE admin(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-	full_name VARCHAR(200),
-	username VARCHAR(200),
-	password VARCHAR(200)		
-);
-
-INSERT INTO admin(full_name, username, password)
-VALUES
-	('phamthi', 'thipt1', '1234');
 		
