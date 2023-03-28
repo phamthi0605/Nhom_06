@@ -253,7 +253,7 @@ public class StatisticalDAO {
                 System.out.printf("%-8s", "|");
                 System.out.printf("%-20s", "Năm");
                 System.out.printf("%-10s", "|");
-                System.out.printf("%-30s", "Tổng lương/Năm");
+                System.out.printf("%-30s", "Tổng lương/Tháng");
                 System.out.printf("%-12s\n", "|");
                 System.out.println("--------------------------------------------------------------------");
                 do {
